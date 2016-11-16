@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="Snw858" name="UltraPan" projectType="audioplug" version="1.0.0"
+              bundleIdentifier="com.JuanSaudio.UltraPan" includeBinaryInAppConfig="1"
+              buildVST="1" buildVST3="1" buildAU="1" buildAUv3="1" buildRTAS="0"
+              buildAAX="0" pluginName="UltraPan" pluginDesc="UltraPan" pluginManufacturer="JuanSaudio"
+              pluginManufacturerCode="JSA" pluginCode="Snw8" pluginChannelConfigs="{1, 8}"
+              pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
+              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="UltraPanAU"
+              pluginRTASCategory="" aaxIdentifier="com.yourcompany.UltraPan"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.0"
+              companyName="JuanSaudio" companyWebsite="www.JuanSaudio.com"
+              companyEmail="jdsierral@JuanSaudio.com">
+  <MAINGROUP id="f3LACm" name="UltraPan">
+    <GROUP id="{C1194327-B5C0-5DD6-EEA9-2C93243D6D2E}" name="Source">
+      <GROUP id="{DA76CD9B-CD9B-F5DB-93A5-B7FC8E45DC64}" name="DSP">
+        <FILE id="F6BKDU" name="SpeakeSystem.cpp" compile="1" resource="0"
+              file="Source/SpeakeSystem.cpp"/>
+        <FILE id="dwfd46" name="SpeakeSystem.h" compile="0" resource="0" file="Source/SpeakeSystem.h"/>
+      </GROUP>
+      <GROUP id="{3B4E4961-8A37-19FC-EAAE-2D7475821307}" name="Tools">
+        <FILE id="kxsvo4" name="PluginParams.cpp" compile="1" resource="0"
+              file="Source/PluginParams.cpp"/>
+        <FILE id="IvlcaR" name="PluginParams.h" compile="0" resource="0" file="Source/PluginParams.h"/>
+      </GROUP>
+      <GROUP id="{88129C2B-5A47-9BE1-9EFB-10C449F9C7C1}" name="GUI Group">
+        <FILE id="BIytNB" name="SetupTab.cpp" compile="1" resource="0" file="Source/SetupTab.cpp"/>
+        <FILE id="oi8VUK" name="SetupTab.h" compile="0" resource="0" file="Source/SetupTab.h"/>
+        <FILE id="Zve6Mi" name="MainTab.cpp" compile="1" resource="0" file="Source/MainTab.cpp"/>
+        <FILE id="qKCiON" name="MainTab.h" compile="0" resource="0" file="Source/MainTab.h"/>
+      </GROUP>
+      <FILE id="d88cn5" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="nRkhg1" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="w2FknK" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="j5gJhu" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="UltraPan"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="UltraPan"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_events" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_video" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_osc" path="../../../Juce-Grapefruit/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_osc" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+</JUCERPROJECT>
