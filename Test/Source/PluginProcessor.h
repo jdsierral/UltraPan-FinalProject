@@ -12,23 +12,21 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "PluginParams.h"
 #include "SpeakerSet.h"
 
 
 //==============================================================================
 /**
 */
-class UltraPanAudioProcessor  : public AudioProcessor
+class TestAudioProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-    UltraPanAudioProcessor();
-    ~UltraPanAudioProcessor();
+    TestAudioProcessor();
+    ~TestAudioProcessor();
 
     //==============================================================================
-	void numChannelsChanged() override;
-	void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
    #ifndef JucePlugin_PreferredChannelConfigurations
@@ -61,41 +59,20 @@ public:
 
 	//==============================================================================
 	//==============================================================================
-	//==============================================================================
 	
-	void clearGuiFlag() { guiFlag = false;}
-	void setGuiFlag()	{ guiFlag = true;}
-	bool getGuiFlag()	{ return guiFlag;}
-	
-	//==============================================================================
-	
-	void setSpeakerPosX(int sp, float newPosX);
-	void setSpeakerPosY(int sp, float newPosY);
-	void setSpeakerPosZ(int sp, float newPosZ);
-	
-	
-	//==============================================================================
-	//==============================================================================
-	
-	AudioParameterCustomBool* bypass;
-	AudioParameterCustomFloat* mainVol;
-	AudioParameterCustomFloat* xPos;
-	AudioParameterCustomFloat* yPos;
-	AudioParameterCustomFloat* zPos;
+	ScopedPointer<AudioParameterFloat> gain;
+	ScopedPointer<AudioParameterInt> source;
 	
 private:
-	bool guiFlag;
-	float mainVolVal;
+	AudioSampleBuffer tempBuffer;
 	
-	//==============================================================================
-	//==============================================================================
+	SpeakerSet speakers;
 	
 	
-	OwnedArray<SpeakerSet> speakerSet;
-	std::vector<AudioSampleBuffer> tempIn;
 	
+
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UltraPanAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TestAudioProcessor)
 };
 
 

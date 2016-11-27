@@ -27,7 +27,8 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-SetupTab::SetupTab ()
+SetupTab::SetupTab (UltraPanAudioProcessor& p)
+    : processor(p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
@@ -66,6 +67,10 @@ SetupTab::SetupTab ()
 
 
     //[Constructor] You can add your own custom stuff here..
+	for (int sp = 0; sp < processor.getTotalNumOutputChannels();){
+		sp++;
+		speakerSelectBox->addItem("Speaker: " + String(sp), sp);
+	}
     //[/Constructor]
 }
 
@@ -132,16 +137,22 @@ void SetupTab::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == speakerPosXSlider)
     {
         //[UserSliderCode_speakerPosXSlider] -- add your slider handling code here..
+		processor.setSpeakerPosX(speakerSelectBox->getSelectedItemIndex(),
+								 speakerPosXSlider->getValue());
         //[/UserSliderCode_speakerPosXSlider]
     }
     else if (sliderThatWasMoved == speakerPosYSlider)
     {
         //[UserSliderCode_speakerPosYSlider] -- add your slider handling code here..
+		processor.setSpeakerPosX(speakerSelectBox->getSelectedItemIndex(),
+								 speakerPosYSlider->getValue());
         //[/UserSliderCode_speakerPosYSlider]
     }
     else if (sliderThatWasMoved == speakerPosZSlider)
     {
         //[UserSliderCode_speakerPosZSlider] -- add your slider handling code here..
+		processor.setSpeakerPosX(speakerSelectBox->getSelectedItemIndex(),
+								 speakerPosZSlider->getValue());
         //[/UserSliderCode_speakerPosZSlider]
     }
 
@@ -165,9 +176,10 @@ void SetupTab::sliderValueChanged (Slider* sliderThatWasMoved)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="SetupTab" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="600" initialHeight="120">
+                 parentClasses="public Component" constructorParams="UltraPanAudioProcessor&amp; p"
+                 variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="600"
+                 initialHeight="120">
   <BACKGROUND backgroundColour="ffffffff"/>
   <COMBOBOX name="new combo box" id="8c25a223e42a10e9" memberName="speakerSelectBox"
             virtualName="" explicitFocusOrder="0" pos="32 72 160 24" editable="0"

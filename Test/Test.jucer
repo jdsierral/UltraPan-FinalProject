@@ -1,48 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="d1G5d4" name="UltraPan" projectType="audioplug" version="1.0.0"
-              bundleIdentifier="com.JuanSaudio.UltraPan" includeBinaryInAppConfig="1"
+<JUCERPROJECT id="QA9IOI" name="Test" projectType="audioplug" version="1.0.0"
+              bundleIdentifier="com.JuanSaudio.Test" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="1" buildAU="1" buildAUv3="0" buildRTAS="0"
-              buildAAX="0" pluginName="UltraPan" pluginDesc="UltraPan" pluginManufacturer="JuanSaudio"
-              pluginManufacturerCode="JSA" pluginCode="D1g5" pluginChannelConfigs=""
+              buildAAX="0" pluginName="Test" pluginDesc="Test" pluginManufacturer="JuanSaudio"
+              pluginManufacturerCode="JSA" pluginCode="Qa9i" pluginChannelConfigs=""
               pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
-              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="UltraPanAU"
-              pluginRTASCategory="" aaxIdentifier="com.yourcompany.UltraPan"
-              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.0"
-              companyName="JuanSaudio" companyWebsite="www.JuanSaudio.com"
+              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="TestAU"
+              pluginRTASCategory="" aaxIdentifier="com.yourcompany.Test" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
+              jucerVersion="4.3.0" companyName="JuanSaudio" companyWebsite="www.JuanSaudio.com"
               companyEmail="jdsierral@JuanSaudio.com">
-  <MAINGROUP id="ai8dsv" name="UltraPan">
-    <GROUP id="{9699C67A-7F86-7E55-3E1C-EA65848A87FE}" name="Source">
-      <GROUP id="{EF75FC96-3CB1-69B0-7660-C7A69EC86F04}" name="Tools">
-        <FILE id="cnyyZU" name="PluginParams.cpp" compile="1" resource="0"
-              file="Source/PluginParams.cpp"/>
-        <FILE id="upH5Ej" name="PluginParams.h" compile="0" resource="0" file="Source/PluginParams.h"/>
-      </GROUP>
-      <GROUP id="{9A8C792E-2671-33B6-16FF-E9EB4628467D}" name="GUI">
-        <FILE id="yDIhim" name="MainTab.cpp" compile="1" resource="0" file="Source/MainTab.cpp"/>
-        <FILE id="PsZk1N" name="MainTab.h" compile="0" resource="0" file="Source/MainTab.h"/>
-        <FILE id="GqXyUy" name="SetupTab.cpp" compile="1" resource="0" file="Source/SetupTab.cpp"/>
-        <FILE id="I3HxPz" name="SetupTab.h" compile="0" resource="0" file="Source/SetupTab.h"/>
-      </GROUP>
-      <GROUP id="{9E94E95A-7CB1-E03A-70C4-02185D3B8BA0}" name="DSP">
-        <FILE id="yOzfke" name="Dsp.h" compile="0" resource="0" file="Source/Dsp.h"/>
-        <FILE id="r55DKT" name="SpeakerSet.cpp" compile="1" resource="0" file="Source/SpeakerSet.cpp"/>
-        <FILE id="ouQG0A" name="SpeakerSet.h" compile="0" resource="0" file="Source/SpeakerSet.h"/>
-      </GROUP>
-      <FILE id="RpUH1e" name="PluginProcessor.cpp" compile="1" resource="0"
+  <MAINGROUP id="rQIjx0" name="Test">
+    <GROUP id="{7FB3A46E-658E-CA6A-F073-2930A45DEFC4}" name="Source">
+      <FILE id="Kt9fIQ" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
+      <FILE id="sv0UL8" name="SpeakerSet.cpp" compile="1" resource="0" file="Source/SpeakerSet.cpp"/>
+      <FILE id="QmjJGm" name="SpeakerSet.h" compile="0" resource="0" file="Source/SpeakerSet.h"/>
+      <FILE id="vzSzHt" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
-      <FILE id="d9YC5q" name="PluginProcessor.h" compile="0" resource="0"
+      <FILE id="QKAcGZ" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="hJpegJ" name="PluginEditor.cpp" compile="1" resource="0"
+      <FILE id="hZPACY" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="Nt8pLT" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="E3wnMR" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="UltraPan"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="UltraPan"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Test"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Test"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../../../Juce-Grapefruit/modules"/>

@@ -14,41 +14,51 @@
 
 //==============================================================================
 UltraPanAudioProcessor::UltraPanAudioProcessor()
+     : AudioProcessor (BusesProperties()
+                       .withInput  ("Input",  AudioChannelSet::stereo(), true)
+                       .withOutput ("Output", AudioChannelSet::discreteChannels(8), true))
 {
+	auto genCallback = [this] (float newValue) {
+		setGuiFlag();
+	};
 	
-	
-	gain.resize(numChan);
-	pos.resize(numChan);
-	
-	speakers = new SpeakerSystem(numChan);
-	
-	for (int i = 0; i < numChan; i++) {
-		gain[i] = 1;
-	}
+	auto mainVolCallback = [this] (float newValue) {
+		mainVolVal = Decibels::decibelsToGain(newValue, -60.f);
+		setGuiFlag();
+	};
 	
 	auto xPosCallback = [this] (float newValue) {
-		speakers->setSourcePosX(newValue);
+		for (int in = 0; in < getMainBusNumInputChannels(); in++) {
+			speakerSet[in]->setSourcePosX(newValue);
+		}
 		setGuiFlag();
 	};
-
+	
 	auto yPosCallback = [this] (float newValue) {
-		speakers->setSourcePosY(newValue);
+		for (int in = 0; in < getMainBusNumInputChannels(); in++) {
+			speakerSet[in]->setSourcePosY(newValue);
+		}
 		setGuiFlag();
 	};
-
+	
 	auto zPosCallback = [this] (float newValue) {
-		speakers->setSourcePosZ(newValue);
+		for (int in = 0; in < getMainBusNumInputChannels(); in++) {
+			speakerSet[in]->setSourcePosZ(newValue);
+		}
 		setGuiFlag();
 	};
-
+	
+	bypass = new AudioParameterCustomBool("bypass", "Bypass", false, genCallback);
+	mainVol = new AudioParameterCustomFloat("mainVol", "Volume", -60, 12, 0, mainVolCallback);
 	xPos = new AudioParameterCustomFloat("xPos", "X Pos", -10, 10, 0, xPosCallback);
 	yPos = new AudioParameterCustomFloat("yPos", "Y Pos", -10, 10, 0, yPosCallback);
 	zPos = new AudioParameterCustomFloat("zPos", "Z Pos", -10, 10, 0, zPosCallback);
 	
+	addParameter(bypass);
+	addParameter(mainVol);
 	addParameter(xPos);
 	addParameter(yPos);
 	addParameter(zPos);
-	
 }
 
 UltraPanAudioProcessor::~UltraPanAudioProcessor()
@@ -109,73 +119,109 @@ void UltraPanAudioProcessor::changeProgramName (int index, const String& newName
 }
 
 //==============================================================================
+void UltraPanAudioProcessor::numChannelsChanged()
+{
+	int numIns = getTotalNumInputChannels();
+	int numOuts = getTotalNumOutputChannels();
+	
+	while (numIns > speakerSet.size())
+		speakerSet.add(new SpeakerSet());
+	while (numIns < speakerSet.size())
+		speakerSet.removeLast();
+	
+	tempIn.resize(numIns);
+	
+	for (int in = 0; in < numIns; in++) {
+		speakerSet[in]->setNumSpeakers(numOuts);
+		speakerSet[in]->init();
+	}
+
+}
+
+
 void UltraPanAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
-	int numOutputs = getTotalNumOutputChannels();
+	int numIns = getTotalNumInputChannels();
+	int numOuts = getTotalNumOutputChannels();
 	
-	for (int i = 0; i < numOutputs; i++) {
-		speakers->setSpeakerPos(i, Vector3D<float>(0.f, 0.f, 0.f));
+	while (numIns > speakerSet.size())
+		speakerSet.add(new SpeakerSet());
+	while (numIns < speakerSet.size())
+		speakerSet.removeLast();
+	
+	tempIn.resize(numIns);
+	
+	for (int in = 0; in < numIns; in++) {
+		tempIn[in].setSize(1, samplesPerBlock);
+		speakerSet[in]->setNumSpeakers(numOuts);
+		speakerSet[in]->init();
+		speakerSet[in]->setBufferSize(samplesPerBlock);
 	}
-	
-	input.setSize(numOutputs, samplesPerBlock);
-	
 }
 
 void UltraPanAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
 }
 
-#ifndef JucePlugin_PreferredChannelConfigurations
 bool UltraPanAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
-  #if JucePlugin_IsMidiEffect
-    ignoreUnused (layouts);
-    return true;
-  #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
-        return false;
-
-    // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-        return false;
-   #endif
-
-    return true;
-  #endif
+	if (layouts.getMainInputChannels() < layouts.getMainOutputChannels()) {
+		return true;
+	}
+	else return false;
 }
-#endif
 
 void UltraPanAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
-    const int numInputs  = getTotalNumInputChannels();
-    const int numOutputs = getTotalNumOutputChannels();
+	const int numIns  = getTotalNumInputChannels();
+	const int numOuts = getTotalNumOutputChannels();
 	const int bufSize = buffer.getNumSamples();
 	
-	for (int i = 0; i < numOutputs; i++) {
-		input.copyFrom(i, 0, buffer, 0, 0, buffer.getNumSamples());
+	float** dataWt = buffer.getArrayOfWritePointers();
+	
+	
+	for (int in = 0; in < numIns; in++) {
+		tempIn[in].copyFrom(0, 0, buffer, in, 0, bufSize);
 	}
 	
-	for (int chan = 0; chan < numOutputs; chan++) {
-		float* out = buffer.getWritePointer(chan);
-		const float* in = buffer.getReadPointer(chan);
-		for (int i = 0; i < bufSize; i++) {
-			out[i] = in[i] * speakers->getGain(i);
-		}
+	buffer.clear();
+	
+	for (int in = 0; in < numIns; in++) {
+		speakerSet[in]->compute(tempIn[in], buffer);
+	}
+	
+	buffer.applyGain(mainVolVal);
+}
+
+
+//==============================================================================
+//==============================================================================
+
+
+void UltraPanAudioProcessor::setSpeakerPosX(int sp, float newPosX){
+	for (int in = 0; in < getTotalNumInputChannels(); in++) {
+		speakerSet[in]->setSpeakerPosX(sp, newPosX);
 	}
 }
 
+void UltraPanAudioProcessor::setSpeakerPosY(int sp, float newPosY){
+	for (int in = 0; in < getTotalNumInputChannels(); in++) {
+		speakerSet[in]->setSpeakerPosY(sp, newPosY);
+	}
+}
+
+void UltraPanAudioProcessor::setSpeakerPosZ(int sp, float newPosZ){
+	for (int in = 0; in < getTotalNumInputChannels(); in++) {
+		speakerSet[in]->setSpeakerPosZ(sp, newPosZ);
+	}
+}
+
+
+//==============================================================================
 //==============================================================================
 bool UltraPanAudioProcessor::hasEditor() const
 {
-    return false; // (change this to false if you choose to not supply an editor)
+    return true; // (change this to false if you choose to not supply an editor)
 }
 
 AudioProcessorEditor* UltraPanAudioProcessor::createEditor()

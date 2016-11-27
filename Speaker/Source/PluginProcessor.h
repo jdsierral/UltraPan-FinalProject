@@ -19,16 +19,15 @@
 //==============================================================================
 /**
 */
-class UltraPanAudioProcessor  : public AudioProcessor
+class SpeakerAudioProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-    UltraPanAudioProcessor();
-    ~UltraPanAudioProcessor();
+    SpeakerAudioProcessor();
+    ~SpeakerAudioProcessor();
 
     //==============================================================================
-	void numChannelsChanged() override;
-	void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
    #ifndef JucePlugin_PreferredChannelConfigurations
@@ -58,44 +57,32 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-
-	//==============================================================================
-	//==============================================================================
-	//==============================================================================
-	
-	void clearGuiFlag() { guiFlag = false;}
-	void setGuiFlag()	{ guiFlag = true;}
-	bool getGuiFlag()	{ return guiFlag;}
-	
-	//==============================================================================
-	
-	void setSpeakerPosX(int sp, float newPosX);
-	void setSpeakerPosY(int sp, float newPosY);
-	void setSpeakerPosZ(int sp, float newPosZ);
-	
-	
 	//==============================================================================
 	//==============================================================================
 	
-	AudioParameterCustomBool* bypass;
-	AudioParameterCustomFloat* mainVol;
-	AudioParameterCustomFloat* xPos;
-	AudioParameterCustomFloat* yPos;
-	AudioParameterCustomFloat* zPos;
+	void setGuiFlag() {
+		guiFlag = true;
+	}
+	
+	void clearGuiFlag() {
+		guiFlag = false;
+	}
+	
+	bool getGuiFlag() {
+		return guiFlag;
+	}
+	
+//	AudioParameterCustomFloat* xPos;
+//	AudioParameterCustomFloat* yPos;
+//	AudioParameterCustomFloat* zPos;
 	
 private:
-	bool guiFlag;
-	float mainVolVal;
-	
-	//==============================================================================
-	//==============================================================================
-	
-	
 	OwnedArray<SpeakerSet> speakerSet;
 	std::vector<AudioSampleBuffer> tempIn;
-	
+
+	bool guiFlag;
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UltraPanAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SpeakerAudioProcessor)
 };
 
 

@@ -28,21 +28,21 @@
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Meter"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_events" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_video" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_video" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../Juce-Grapefruit/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>

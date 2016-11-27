@@ -28,7 +28,7 @@
 
 //==============================================================================
 UltraPanAudioProcessorEditor::UltraPanAudioProcessorEditor (UltraPanAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+    : AudioProcessorEditor(&p), processor(p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
@@ -53,9 +53,13 @@ UltraPanAudioProcessorEditor::UltraPanAudioProcessorEditor (UltraPanAudioProcess
 
     addAndMakeVisible (tabs = new TabbedComponent (TabbedButtonBar::TabsAtTop));
     tabs->setTabBarDepth (24);
-    tabs->addTab (TRANS("Main"), Colours::lightgrey, new MainTab(), true);
-    tabs->addTab (TRANS("Config"), Colours::lightgrey, new SetupTab(), true);
+    tabs->addTab (TRANS("Main"), Colours::lightgrey, new MainTab (processor), true);
+    tabs->addTab (TRANS("Config"), Colours::lightgrey, new SetupTab (processor), true);
     tabs->setCurrentTabIndex (0);
+
+    addAndMakeVisible (toggleButton = new ToggleButton ("new toggle button"));
+    toggleButton->setButtonText (TRANS("bypass"));
+    toggleButton->addListener (this);
 
 
     //[UserPreSize]
@@ -65,6 +69,7 @@ UltraPanAudioProcessorEditor::UltraPanAudioProcessorEditor (UltraPanAudioProcess
 
 
     //[Constructor] You can add your own custom stuff here..
+	startTimer(50);
     //[/Constructor]
 }
 
@@ -77,6 +82,7 @@ UltraPanAudioProcessorEditor::~UltraPanAudioProcessorEditor()
     yPosSlider = nullptr;
     zPosSlider = nullptr;
     tabs = nullptr;
+    toggleButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -106,10 +112,11 @@ void UltraPanAudioProcessorEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    xPosSlider->setBounds (24, 112, 150, 32);
-    yPosSlider->setBounds (24, 144, 150, 32);
-    zPosSlider->setBounds (24, 176, 150, 32);
-    tabs->setBounds (0, 280, 600, 120);
+    xPosSlider->setBounds (24, 120, 150, 32);
+    yPosSlider->setBounds (24, 152, 150, 32);
+    zPosSlider->setBounds (24, 184, 150, 32);
+    tabs->setBounds (0, 256, 600, 144);
+    toggleButton->setBounds (528, 0, 72, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -142,9 +149,28 @@ void UltraPanAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMove
     //[/UsersliderValueChanged_Post]
 }
 
+void UltraPanAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
+{
+    //[UserbuttonClicked_Pre]
+    //[/UserbuttonClicked_Pre]
+
+    if (buttonThatWasClicked == toggleButton)
+    {
+        //[UserButtonCode_toggleButton] -- add your button handler code here..
+		*processor.bypass = toggleButton->getToggleState();
+        //[/UserButtonCode_toggleButton]
+    }
+
+    //[UserbuttonClicked_Post]
+    //[/UserbuttonClicked_Post]
+}
+
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void UltraPanAudioProcessorEditor::timerCallback() {
+
+}
 //[/MiscUserCode]
 
 
@@ -158,8 +184,8 @@ void UltraPanAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMove
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="UltraPanAudioProcessorEditor"
-                 componentName="" parentClasses="public AudioProcessorEditor"
-                 constructorParams="UltraPanAudioProcessor&amp; p" variableInitialisers="AudioProcessorEditor (&amp;p), processor (p)"
+                 componentName="" parentClasses="public AudioProcessorEditor, public Timer"
+                 constructorParams="UltraPanAudioProcessor&amp; p" variableInitialisers="AudioProcessorEditor(&amp;p), processor(p)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff">
@@ -168,28 +194,31 @@ BEGIN_JUCER_METADATA
           italic="0" justification="36"/>
   </BACKGROUND>
   <SLIDER name="X Pos Slider" id="4c5e01c12c9ae086" memberName="xPosSlider"
-          virtualName="" explicitFocusOrder="0" pos="24 112 150 32" min="-10"
+          virtualName="" explicitFocusOrder="0" pos="24 120 150 32" min="-10"
           max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
   <SLIDER name="Y Pos Slider" id="5082a310d30c270b" memberName="yPosSlider"
-          virtualName="" explicitFocusOrder="0" pos="24 144 150 32" min="-10"
+          virtualName="" explicitFocusOrder="0" pos="24 152 150 32" min="-10"
           max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
   <SLIDER name="Z Pos Slider" id="b4b331794686aab3" memberName="zPosSlider"
-          virtualName="" explicitFocusOrder="0" pos="24 176 150 32" min="-10"
+          virtualName="" explicitFocusOrder="0" pos="24 184 150 32" min="-10"
           max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
   <TABBEDCOMPONENT name="Tab Component" id="2ec337020e87f883" memberName="tabs"
-                   virtualName="" explicitFocusOrder="0" pos="0 280 600 120" orientation="top"
+                   virtualName="" explicitFocusOrder="0" pos="0 256 600 144" orientation="top"
                    tabBarDepth="24" initialTab="0">
     <TAB name="Main" colour="ffd3d3d3" useJucerComp="0" contentClassName="MainTab"
-         constructorParams="" jucerComponentFile=""/>
+         constructorParams="processor" jucerComponentFile=""/>
     <TAB name="Config" colour="ffd3d3d3" useJucerComp="0" contentClassName="SetupTab"
-         constructorParams="" jucerComponentFile=""/>
+         constructorParams="processor" jucerComponentFile=""/>
   </TABBEDCOMPONENT>
+  <TOGGLEBUTTON name="new toggle button" id="8adcb962da3936e4" memberName="toggleButton"
+                virtualName="" explicitFocusOrder="0" pos="528 0 72 24" buttonText="bypass"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

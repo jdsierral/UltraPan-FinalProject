@@ -22,6 +22,7 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "PluginProcessor.h"
 //[/Headers]
 
 
@@ -39,7 +40,7 @@ class MainTab  : public Component,
 {
 public:
     //==============================================================================
-    MainTab ();
+    MainTab (UltraPanAudioProcessor& p);
     ~MainTab();
 
     //==============================================================================
@@ -54,10 +55,11 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+	UltraPanAudioProcessor& processor;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> slider;
+    ScopedPointer<Slider> mainVolSlider;
 
 
     //==============================================================================

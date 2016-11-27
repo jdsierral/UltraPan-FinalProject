@@ -139,10 +139,10 @@ void MeterAudioProcessorEditor::resized()
     chan1Slider->setBounds (24, 80, 152, 16);
     chan2Slider->setBounds (24, 104, 152, 16);
     chan3Slider->setBounds (24, 128, 152, 16);
-    chan4Slider->setBounds (24, 224, 152, 16);
+    chan4Slider->setBounds (24, 152, 152, 16);
     chan5Slider->setBounds (24, 176, 152, 16);
-    chan6Slider->setBounds (24, 152, 152, 16);
-    chan7Slider->setBounds (24, 200, 152, 16);
+    chan6Slider->setBounds (24, 200, 152, 16);
+    chan7Slider->setBounds (24, 224, 152, 16);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -257,7 +257,7 @@ BEGIN_JUCER_METADATA
           max="0" int="0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="Chan 4 Slider" id="f5836031c52187e2" memberName="chan4Slider"
-          virtualName="" explicitFocusOrder="0" pos="24 224 152 16" min="-120"
+          virtualName="" explicitFocusOrder="0" pos="24 152 152 16" min="-120"
           max="0" int="0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="Chan 5 Slider" id="21fb980554e4d032" memberName="chan5Slider"
@@ -265,11 +265,11 @@ BEGIN_JUCER_METADATA
           max="0" int="0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="Chan 6 Slider" id="dede3a07f9e86da4" memberName="chan6Slider"
-          virtualName="" explicitFocusOrder="0" pos="24 152 152 16" min="-120"
+          virtualName="" explicitFocusOrder="0" pos="24 200 152 16" min="-120"
           max="0" int="0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="Chan 7 Slider" id="d7ab1e7cc7388bf3" memberName="chan7Slider"
-          virtualName="" explicitFocusOrder="0" pos="24 200 152 16" min="-120"
+          virtualName="" explicitFocusOrder="0" pos="24 224 152 16" min="-120"
           max="0" int="0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
 </JUCER_COMPONENT>

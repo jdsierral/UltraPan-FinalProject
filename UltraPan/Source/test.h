@@ -17,14 +17,11 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_766762D71FE39ED6__
-#define __JUCE_HEADER_766762D71FE39ED6__
+#ifndef __JUCE_HEADER_EFFDAB3E5D9D3F98__
+#define __JUCE_HEADER_EFFDAB3E5D9D3F98__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "PluginProcessor.h"
-#include "SetupTab.h"
-#include "MainTab.h"
 //[/Headers]
 
 
@@ -37,46 +34,34 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class UltraPanAudioProcessorEditor  : public AudioProcessorEditor,
-                                      public Timer,
-                                      public SliderListener,
-                                      public ButtonListener
+class test  : public Component
 {
 public:
     //==============================================================================
-    UltraPanAudioProcessorEditor (UltraPanAudioProcessor& p);
-    ~UltraPanAudioProcessorEditor();
+    test ();
+    ~test();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-	void timerCallback() override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
-    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    UltraPanAudioProcessor& processor;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> xPosSlider;
-    ScopedPointer<Slider> yPosSlider;
-    ScopedPointer<Slider> zPosSlider;
-    ScopedPointer<TabbedComponent> tabs;
-    ScopedPointer<ToggleButton> toggleButton;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UltraPanAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (test)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_766762D71FE39ED6__
+#endif   // __JUCE_HEADER_EFFDAB3E5D9D3F98__
