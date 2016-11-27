@@ -83,6 +83,8 @@ public:
 	AudioParameterCustomFloat* yPos;
 	AudioParameterCustomFloat* zPos;
 	
+	OwnedArray<SpeakerSet> speakerSet;
+	std::vector<AudioSampleBuffer> tempIn;
 private:
 	bool guiFlag;
 	float mainVolVal;
@@ -91,8 +93,6 @@ private:
 	//==============================================================================
 	
 	
-	OwnedArray<SpeakerSet> speakerSet;
-	std::vector<AudioSampleBuffer> tempIn;
 	
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UltraPanAudioProcessor)

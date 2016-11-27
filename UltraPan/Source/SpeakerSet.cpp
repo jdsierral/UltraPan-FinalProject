@@ -10,7 +10,7 @@
 
 #include "SpeakerSet.h"
 
-SpeakerSet::SpeakerSet() : totalNumSpeakers(0){
+SpeakerSet::SpeakerSet() : totalNumSpeakers(0), base(1.02), scale(1) {
 }
 
 SpeakerSet::~SpeakerSet(){
@@ -20,7 +20,7 @@ SpeakerSet::~SpeakerSet(){
 void SpeakerSet::init() {
 	for (int sp = 0; sp < totalNumSpeakers; sp++) {
 		speakers[sp]->init(SR);
-		speakers[sp]->name = String("Speaker: " + String(sp));
+		speakers[sp]->name = String("Speaker " + String(sp));
 	}
 }
 
@@ -116,6 +116,10 @@ float SpeakerSet::getSpeakerDelay(int sp){
 	return speakers[sp]->params.getParamValue("/Sp/gain");
 }
 
+String SpeakerSet::getSpeakerName(int sp){
+	return speakers[sp]->name;
+}
+
 float SpeakerSet::getBase() {
 	return base;
 }
@@ -146,4 +150,8 @@ void SpeakerSet::updateAllGains() {
 void SpeakerSet::updateSpeakerGain(int sp) {
 	float exponent = (sourcePos - speakers[sp]->pos).lengthSquared();
 	speakers[sp]->params.setParamValue("/Sp/gain", scale * powf(base, -(exponent)));
+	DBG(speakers[sp]->name << " : " <<
+		String(speakers[sp]->pos.x) << ", " <<
+		String(speakers[sp]->pos.y) << ", " <<
+		String(speakers[sp]->pos.z));
 }

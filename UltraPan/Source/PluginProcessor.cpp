@@ -48,11 +48,16 @@ UltraPanAudioProcessor::UltraPanAudioProcessor()
 		setGuiFlag();
 	};
 	
-	bypass = new AudioParameterCustomBool("bypass", "Bypass", false, genCallback);
-	mainVol = new AudioParameterCustomFloat("mainVol", "Volume", -60, 12, 0, mainVolCallback);
-	xPos = new AudioParameterCustomFloat("xPos", "X Pos", -10, 10, 0, xPosCallback);
-	yPos = new AudioParameterCustomFloat("yPos", "Y Pos", -10, 10, 0, yPosCallback);
-	zPos = new AudioParameterCustomFloat("zPos", "Z Pos", -10, 10, 0, zPosCallback);
+	bypass = new AudioParameterCustomBool
+	("bypass", "Bypass", false, genCallback);
+	mainVol = new AudioParameterCustomFloat
+	("mainVol", "Volume", -60, 12, 0, mainVolCallback);
+	xPos = new AudioParameterCustomFloat
+	("xPos", "X Pos", -10, 10, 0, xPosCallback);
+	yPos = new AudioParameterCustomFloat
+	("yPos", "Y Pos", -10, 10, 0, yPosCallback);
+	zPos = new AudioParameterCustomFloat
+	("zPos", "Z Pos", -10, 10, 0, zPosCallback);
 	
 	addParameter(bypass);
 	addParameter(mainVol);

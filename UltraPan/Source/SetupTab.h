@@ -37,7 +37,8 @@
 */
 class SetupTab  : public Component,
                   public ComboBoxListener,
-                  public SliderListener
+                  public SliderListener,
+                  public ButtonListener
 {
 public:
     //==============================================================================
@@ -52,6 +53,7 @@ public:
     void resized() override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
@@ -65,6 +67,14 @@ private:
     ScopedPointer<Slider> speakerPosXSlider;
     ScopedPointer<Slider> speakerPosYSlider;
     ScopedPointer<Slider> speakerPosZSlider;
+    ScopedPointer<TextButton> _1;
+    ScopedPointer<TextButton> _2;
+    ScopedPointer<TextButton> _3;
+    ScopedPointer<TextButton> _4;
+    ScopedPointer<TextButton> _5;
+    ScopedPointer<TextButton> _6;
+    ScopedPointer<TextButton> _7;
+    ScopedPointer<TextButton> _8;
 
 
     //==============================================================================

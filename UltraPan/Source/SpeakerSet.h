@@ -78,6 +78,7 @@ public:
 	Vector3D<float> getSpeakerPos(int numSpeaker);
 	float getSpeakerGain(int numSpeaker);
 	float getSpeakerDelay(int numSpeaker);
+	String getSpeakerName(int numSpeaker);
 	float getBase();
 	float getScale();
 	
