@@ -73,6 +73,8 @@ public:
 	void setSpeakerPosY(int sp, float newPosY);
 	void setSpeakerPosZ(int sp, float newPosZ);
 	
+	void setBase(float newBase);
+	
 	
 	//==============================================================================
 	//==============================================================================

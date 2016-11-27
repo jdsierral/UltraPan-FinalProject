@@ -17,7 +17,8 @@ SpeakerSet::~SpeakerSet(){
 }
 //=================================================================
 
-void SpeakerSet::init() {
+void SpeakerSet::init(int sampleRate) {
+	SR = sampleRate;
 	for (int sp = 0; sp < totalNumSpeakers; sp++) {
 		speakers[sp]->init(SR);
 		speakers[sp]->name = String("Speaker " + String(sp));
@@ -27,12 +28,11 @@ void SpeakerSet::init() {
 //=================================================================
 
 void SpeakerSet::setNumSpeakers(int newNumSpeakers){
-	if (newNumSpeakers > totalNumSpeakers) {
+	if (newNumSpeakers != totalNumSpeakers) {
 		while (newNumSpeakers > totalNumSpeakers) {
 			speakers.add(new Speaker());
 			totalNumSpeakers = speakers.size();
 		}
-	} else if (newNumSpeakers < totalNumSpeakers) {
 		while (newNumSpeakers < totalNumSpeakers) {
 			speakers.removeLast();
 			totalNumSpeakers = speakers.size();
@@ -50,52 +50,56 @@ void SpeakerSet::setBufferSize(int bufSize){
 
 void SpeakerSet::setSourcePos(Vector3D<float> newPos){
 	sourcePos = newPos;
-	updateAllGains();
+	updateAllSpeakers();
 }
 
 void SpeakerSet::setSourcePosX(float newPosX){
 	sourcePos.x = newPosX;
-	updateAllGains();
+	updateAllSpeakers();
 }
 
 void SpeakerSet::setSourcePosY(float newPosY){
 	sourcePos.y = newPosY;
-	updateAllGains();
+	updateAllSpeakers();
 }
 
 void SpeakerSet::setSourcePosZ(float newPosZ){
 	sourcePos.z = newPosZ;
-	updateAllGains();
+	updateAllSpeakers();
 }
 
 void SpeakerSet::setSpeakerPos(int sp, Vector3D<float> newPos){
 	speakers[sp]->pos = newPos;
-	updateSpeakerGain(sp);
+	checkMinDistance();
+	updateSpeaker(sp);
 }
 
 void SpeakerSet::setSpeakerPosX(int sp, float newPosX){
 	speakers[sp]->pos.x = newPosX;
-	updateSpeakerGain(sp);
+	checkMinDistance();
+	updateSpeaker(sp);
 }
 
 void SpeakerSet::setSpeakerPosY(int sp, float newPosY){
-	speakers[sp]->pos.x = newPosY;
-	updateSpeakerGain(sp);
+	speakers[sp]->pos.y = newPosY;
+	checkMinDistance();
+	updateSpeaker(sp);
 }
 
 void SpeakerSet::setSpeakerPosZ(int sp, float newPosZ){
-	speakers[sp]->pos.x = newPosZ;
-	updateSpeakerGain(sp);
+	speakers[sp]->pos.z = newPosZ;
+	checkMinDistance();
+	updateSpeaker(sp);
 }
 
 void SpeakerSet::setBase(float newBase) {
 	base = newBase;
-	updateAllGains();
+	updateAllSpeakers();
 }
 
 void SpeakerSet::setScale(float newScale) {
 	scale = newScale;
-	updateAllGains();
+	updateAllSpeakers();
 }
 
 //=================================================================
@@ -141,15 +145,31 @@ void SpeakerSet::compute(AudioSampleBuffer& inBuffer, AudioSampleBuffer& outBuff
 
 //=================================================================
 
-void SpeakerSet::updateAllGains() {
+void SpeakerSet::updateAllSpeakers() {
 	for (int sp = 0; sp < totalNumSpeakers; sp++) {
-		updateSpeakerGain(sp);
+		updateSpeaker(sp);
 	}
 }
 
-void SpeakerSet::updateSpeakerGain(int sp) {
+void SpeakerSet::updateSpeaker(int sp) {
 	float exponent = (sourcePos - speakers[sp]->pos).lengthSquared();
-	speakers[sp]->params.setParamValue("/Sp/gain", scale * powf(base, -(exponent)));
+	speakers[sp]->params.setParamValue("/Sp/gain", powf(base, -(exponent)));
+	
+	float dist = std::sqrt(exponent) + speakers[sp]->pos.length() - minDist;
+	speakers[sp]->params.setParamValue("/Sp/delay", dist * SR/c);
+}
+
+void SpeakerSet::checkMinDistance(){
+	jassert(totalNumSpeakers > 0);
+	minDist = speakers[0]->pos.length();
+	for (int sp = 0; sp < totalNumSpeakers; sp++) {
+		float speakerDist = speakers[sp]->pos.length();
+		if (speakerDist < minDist)
+			minDist = speakerDist;
+	}
+}
+
+void SpeakerSet::printParam(int sp) {
 	DBG(speakers[sp]->name << " : " <<
 		String(speakers[sp]->pos.x) << ", " <<
 		String(speakers[sp]->pos.y) << ", " <<

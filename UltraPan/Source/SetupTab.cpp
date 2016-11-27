@@ -103,6 +103,7 @@ SetupTab::SetupTab (UltraPanAudioProcessor& p)
 		sp++;
 		speakerSelectBox->addItem("Speaker: " + String(sp), sp);
 	}
+	speakerSelectBox->setSelectedItemIndex(0);
     //[/Constructor]
 }
 
@@ -170,6 +171,11 @@ void SetupTab::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     if (comboBoxThatHasChanged == speakerSelectBox)
     {
         //[UserComboBoxCode_speakerSelectBox] -- add your combo box handling code here..
+		Vector3D<float> speakerPos = processor.speakerSet[0]->getSpeakerPos(speakerSelectBox->getSelectedItemIndex());
+		
+		speakerPosXSlider->setValue(speakerPos.x, dontSendNotification);
+		speakerPosYSlider->setValue(speakerPos.y, dontSendNotification);
+		speakerPosZSlider->setValue(speakerPos.z, dontSendNotification);
         //[/UserComboBoxCode_speakerSelectBox]
     }
 
@@ -192,14 +198,14 @@ void SetupTab::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == speakerPosYSlider)
     {
         //[UserSliderCode_speakerPosYSlider] -- add your slider handling code here..
-		processor.setSpeakerPosX(speakerSelectBox->getSelectedItemIndex(),
+		processor.setSpeakerPosY(speakerSelectBox->getSelectedItemIndex(),
 								 speakerPosYSlider->getValue());
         //[/UserSliderCode_speakerPosYSlider]
     }
     else if (sliderThatWasMoved == speakerPosZSlider)
     {
         //[UserSliderCode_speakerPosZSlider] -- add your slider handling code here..
-		processor.setSpeakerPosX(speakerSelectBox->getSelectedItemIndex(),
+		processor.setSpeakerPosZ(speakerSelectBox->getSelectedItemIndex(),
 								 speakerPosZSlider->getValue());
         //[/UserSliderCode_speakerPosZSlider]
     }

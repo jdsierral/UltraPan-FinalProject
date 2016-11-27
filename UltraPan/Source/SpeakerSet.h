@@ -49,7 +49,7 @@ public:
 	
 	//=================================================================
 	
-	void init();
+	void init(int sampleRate);
 	
 	//=================================================================
 	
@@ -91,8 +91,10 @@ public:
 	
 private:
 	
-	void updateAllGains();
-	void updateSpeakerGain(int numSpeaker);
+	void updateAllSpeakers();
+	void updateSpeaker(int numSpeaker);
+	void checkMinDistance();
+	void printParam(int sp);
 	
 	//=================================================================
 	
@@ -102,8 +104,11 @@ private:
 	OwnedArray<Speaker> speakers;
 	
 	float base;
-	float scale;
-	float SR = 44100;
+	float scale; // maybe it wont be needed;
+	float SR;
+	
+	float minDist;
+	const float c = 340.f;//m/s
 	
 	//	fmOsc.init(sampleRate);
 	//	fmOsc.buildUserInterface(&oscParams);

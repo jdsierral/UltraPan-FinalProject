@@ -39,6 +39,12 @@ MainTab::MainTab (UltraPanAudioProcessor& p)
     mainVolSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     mainVolSlider->addListener (this);
 
+    addAndMakeVisible (baseSlider = new Slider ("Base Slider"));
+    baseSlider->setRange (1, 1000, 0);
+    baseSlider->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
+    baseSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    baseSlider->addListener (this);
+
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -56,6 +62,7 @@ MainTab::~MainTab()
     //[/Destructor_pre]
 
     mainVolSlider = nullptr;
+    baseSlider = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -80,6 +87,7 @@ void MainTab::resized()
     //[/UserPreResize]
 
     mainVolSlider->setBounds (512, 24, 72, 80);
+    baseSlider->setBounds (432, 80, 72, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -94,6 +102,12 @@ void MainTab::sliderValueChanged (Slider* sliderThatWasMoved)
         //[UserSliderCode_mainVolSlider] -- add your slider handling code here..
 		*processor.mainVol = mainVolSlider->getValue();
         //[/UserSliderCode_mainVolSlider]
+    }
+    else if (sliderThatWasMoved == baseSlider)
+    {
+        //[UserSliderCode_baseSlider] -- add your slider handling code here..
+		processor.setBase(baseSlider->getValue());
+        //[/UserSliderCode_baseSlider]
     }
 
     //[UsersliderValueChanged_Post]
@@ -124,6 +138,11 @@ BEGIN_JUCER_METADATA
   <SLIDER name="Main Volume Slider" id="48e517a99b24c0fe" memberName="mainVolSlider"
           virtualName="" explicitFocusOrder="0" pos="512 24 72 80" min="-60"
           max="12" int="0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxBelow"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
+          needsCallback="1"/>
+  <SLIDER name="Base Slider" id="271c0bce09620c47" memberName="baseSlider"
+          virtualName="" explicitFocusOrder="0" pos="432 80 72 24" min="1"
+          max="1000" int="0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
 </JUCER_COMPONENT>

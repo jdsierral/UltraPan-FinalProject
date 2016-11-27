@@ -138,9 +138,8 @@ void UltraPanAudioProcessor::numChannelsChanged()
 	
 	for (int in = 0; in < numIns; in++) {
 		speakerSet[in]->setNumSpeakers(numOuts);
-		speakerSet[in]->init();
+		speakerSet[in]->init(getSampleRate());
 	}
-
 }
 
 
@@ -159,7 +158,7 @@ void UltraPanAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 	for (int in = 0; in < numIns; in++) {
 		tempIn[in].setSize(1, samplesPerBlock);
 		speakerSet[in]->setNumSpeakers(numOuts);
-		speakerSet[in]->init();
+		speakerSet[in]->init(sampleRate);
 		speakerSet[in]->setBufferSize(samplesPerBlock);
 	}
 }
@@ -221,6 +220,12 @@ void UltraPanAudioProcessor::setSpeakerPosZ(int sp, float newPosZ){
 	}
 }
 
+void UltraPanAudioProcessor::setBase(float newBase){
+	for (int in = 0; in < getTotalNumInputChannels(); in++) {
+		speakerSet[in]->setBase(1 + newBase/1000.f);
+	}
+}
+
 
 //==============================================================================
 //==============================================================================
@@ -231,7 +236,22 @@ bool UltraPanAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* UltraPanAudioProcessor::createEditor()
 {
-    return new UltraPanAudioProcessorEditor (*this);
+	int numIns = getTotalNumInputChannels();
+	int numOuts = getTotalNumOutputChannels();
+	
+	while (numIns > speakerSet.size())
+		speakerSet.add(new SpeakerSet());
+	while (numIns < speakerSet.size())
+		speakerSet.removeLast();
+	
+	tempIn.resize(numIns);
+	
+	for (int in = 0; in < numIns; in++) {
+		speakerSet[in]->setNumSpeakers(numOuts);
+		speakerSet[in]->init(getSampleRate());
+	}
+	
+	return new UltraPanAudioProcessorEditor (*this);
 }
 
 //==============================================================================
