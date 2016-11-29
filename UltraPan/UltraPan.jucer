@@ -19,6 +19,8 @@
         <FILE id="upH5Ej" name="PluginParams.h" compile="0" resource="0" file="Source/PluginParams.h"/>
       </GROUP>
       <GROUP id="{9A8C792E-2671-33B6-16FF-E9EB4628467D}" name="GUI">
+        <FILE id="ScRWsN" name="UltraPanLookAndFeel.h" compile="0" resource="0"
+              file="Source/UltraPanLookAndFeel.h"/>
         <FILE id="yDIhim" name="MainTab.cpp" compile="1" resource="0" file="Source/MainTab.cpp"/>
         <FILE id="PsZk1N" name="MainTab.h" compile="0" resource="0" file="Source/MainTab.h"/>
         <FILE id="GqXyUy" name="SetupTab.cpp" compile="1" resource="0" file="Source/SetupTab.cpp"/>

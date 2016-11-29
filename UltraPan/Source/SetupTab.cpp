@@ -138,8 +138,41 @@ void SetupTab::paint (Graphics& g)
 
     g.fillAll (Colours::white);
 
+    g.setGradientFill (ColourGradient (Colour (0xff71c100),
+                                       304.0f, 120.0f,
+                                       Colour (0xff4b8100),
+                                       304.0f, 0.0f,
+                                       false));
+    g.fillRect (-9, -3, 617, 131);
+
     //[UserPaint] Add your own custom painting code here..
-    //[/UserPaint]
+	
+	chanHor = y * (speakerPosXSlider->getMaximum()-x)/(speakerPosXSlider->getMaximum()-speakerPosXSlider->getMinimum());
+	chanVer = - z * (speakerPosYSlider->getMaximum()-x)/(speakerPosYSlider->getMaximum()-speakerPosYSlider->getMinimum());
+	chanVerS= (speakerPosYSlider->getMaximum()-x) * (speakerPosYSlider->getMaximum()-x)/(speakerPosXSlider->getMaximum()-speakerPosXSlider->getMinimum());
+	radi = 15 * (((speakerPosXSlider->getMaximum()-x)/(speakerPosXSlider->getMaximum()-speakerPosXSlider->getMinimum())) * 0.9 + 0.1);
+	
+	
+	g.setColour (Colour (0xb3000000));
+	g.fillEllipse (baseHor - radi + 5 * chanHor,
+				   baseVer - radi + 2 * chanVerS + 85,
+				   radi * 2,
+				   radi / 2);
+	
+	g.setGradientFill (ColourGradient (Colour (0xffb9a384),
+									   baseHor + 5.75 * (chanHor),
+									   baseVer + 5 * (chanVer) - radi,
+									   Colour (0xff574326),
+									   baseHor + 4.25 * (chanHor),
+									   baseVer + 5 * (chanVer) + radi,
+									   true));
+	
+	g.fillEllipse (baseHor - radi + 5 * (chanHor),
+				   baseVer - radi + 5 * (chanVer),
+				   radi * 2,
+				   radi * 2);
+	
+	//[/UserPaint]
 }
 
 void SetupTab::resized()
@@ -172,14 +205,20 @@ void SetupTab::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     {
         //[UserComboBoxCode_speakerSelectBox] -- add your combo box handling code here..
 		Vector3D<float> speakerPos = processor.speakerSet[0]->getSpeakerPos(speakerSelectBox->getSelectedItemIndex());
+
+		y = speakerPos.x;
+		z = speakerPos.y;
+		x = speakerPos.z;
 		
-		speakerPosXSlider->setValue(speakerPos.x, dontSendNotification);
-		speakerPosYSlider->setValue(speakerPos.y, dontSendNotification);
-		speakerPosZSlider->setValue(speakerPos.z, dontSendNotification);
+		speakerPosXSlider->setValue(y, dontSendNotification);
+		speakerPosYSlider->setValue(z, dontSendNotification);
+		speakerPosZSlider->setValue(x, dontSendNotification);
+		
         //[/UserComboBoxCode_speakerSelectBox]
     }
 
     //[UsercomboBoxChanged_Post]
+	repaint();
     //[/UsercomboBoxChanged_Post]
 }
 
@@ -191,26 +230,27 @@ void SetupTab::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == speakerPosXSlider)
     {
         //[UserSliderCode_speakerPosXSlider] -- add your slider handling code here..
-		processor.setSpeakerPosX(speakerSelectBox->getSelectedItemIndex(),
-								 speakerPosXSlider->getValue());
+		y = speakerPosXSlider->getValue();
+		processor.setSpeakerPosX(speakerSelectBox->getSelectedItemIndex(),y);
         //[/UserSliderCode_speakerPosXSlider]
     }
     else if (sliderThatWasMoved == speakerPosYSlider)
     {
         //[UserSliderCode_speakerPosYSlider] -- add your slider handling code here..
-		processor.setSpeakerPosY(speakerSelectBox->getSelectedItemIndex(),
-								 speakerPosYSlider->getValue());
+		z = speakerPosYSlider->getValue();
+		processor.setSpeakerPosY(speakerSelectBox->getSelectedItemIndex(),z);
         //[/UserSliderCode_speakerPosYSlider]
     }
     else if (sliderThatWasMoved == speakerPosZSlider)
     {
         //[UserSliderCode_speakerPosZSlider] -- add your slider handling code here..
-		processor.setSpeakerPosZ(speakerSelectBox->getSelectedItemIndex(),
-								 speakerPosZSlider->getValue());
+		x = speakerPosZSlider->getValue();
+		processor.setSpeakerPosZ(speakerSelectBox->getSelectedItemIndex(),x);
         //[/UserSliderCode_speakerPosZSlider]
     }
 
     //[UsersliderValueChanged_Post]
+	repaint();
     //[/UsersliderValueChanged_Post]
 }
 
@@ -230,6 +270,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		pos = processor.speakerSet[0]->getSpeakerPos(0);
 		gain = processor.speakerSet[0]->getSpeakerGain(0);
 		delay = processor.speakerSet[0]->getSpeakerDelay(0);
+		speakerSelectBox->setSelectedItemIndex(0);
         //[/UserButtonCode__1]
     }
     else if (buttonThatWasClicked == _2)
@@ -239,6 +280,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		pos = processor.speakerSet[0]->getSpeakerPos(1);
 		gain = processor.speakerSet[0]->getSpeakerGain(1);
 		delay = processor.speakerSet[0]->getSpeakerDelay(1);
+		speakerSelectBox->setSelectedItemIndex(1);
         //[/UserButtonCode__2]
     }
     else if (buttonThatWasClicked == _3)
@@ -248,6 +290,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		pos = processor.speakerSet[0]->getSpeakerPos(2);
 		gain = processor.speakerSet[0]->getSpeakerGain(2);
 		delay = processor.speakerSet[0]->getSpeakerDelay(2);
+		speakerSelectBox->setSelectedItemIndex(2);
         //[/UserButtonCode__3]
     }
     else if (buttonThatWasClicked == _4)
@@ -257,6 +300,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		pos = processor.speakerSet[0]->getSpeakerPos(3);
 		gain = processor.speakerSet[0]->getSpeakerGain(3);
 		delay = processor.speakerSet[0]->getSpeakerDelay(3);
+		speakerSelectBox->setSelectedItemIndex(3);
         //[/UserButtonCode__4]
     }
     else if (buttonThatWasClicked == _5)
@@ -266,6 +310,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		pos = processor.speakerSet[0]->getSpeakerPos(4);
 		gain = processor.speakerSet[0]->getSpeakerGain(4);
 		delay = processor.speakerSet[0]->getSpeakerDelay(4);
+		speakerSelectBox->setSelectedItemIndex(4);
         //[/UserButtonCode__5]
     }
     else if (buttonThatWasClicked == _6)
@@ -275,6 +320,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		pos = processor.speakerSet[0]->getSpeakerPos(5);
 		gain = processor.speakerSet[0]->getSpeakerGain(5);
 		delay = processor.speakerSet[0]->getSpeakerDelay(5);
+		speakerSelectBox->setSelectedItemIndex(5);
         //[/UserButtonCode__6]
     }
     else if (buttonThatWasClicked == _7)
@@ -284,6 +330,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		pos = processor.speakerSet[0]->getSpeakerPos(6);
 		gain = processor.speakerSet[0]->getSpeakerGain(6);
 		delay = processor.speakerSet[0]->getSpeakerDelay(6);
+		speakerSelectBox->setSelectedItemIndex(6);
         //[/UserButtonCode__7]
     }
     else if (buttonThatWasClicked == _8)
@@ -293,6 +340,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		pos = processor.speakerSet[0]->getSpeakerPos(7);
 		gain = processor.speakerSet[0]->getSpeakerGain(7);
 		delay = processor.speakerSet[0]->getSpeakerDelay(7);
+		speakerSelectBox->setSelectedItemIndex(7);
         //[/UserButtonCode__8]
     }
 
@@ -301,6 +349,8 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		"\nPos: " << pos.x << ", " << pos.y << ", " << pos.z << ", " <<
 		"\nGain: " << gain <<
 		"\ndelay: " << delay);
+	
+	repaint();
     //[/UserbuttonClicked_Post]
 }
 
@@ -324,7 +374,10 @@ BEGIN_JUCER_METADATA
                  variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="600"
                  initialHeight="120">
-  <BACKGROUND backgroundColour="ffffffff"/>
+  <BACKGROUND backgroundColour="ffffffff">
+    <RECT pos="-9 -3 617 131" fill="linear: 304 120, 304 0, 0=ff71c100, 1=ff4b8100"
+          hasStroke="0"/>
+  </BACKGROUND>
   <COMBOBOX name="new combo box" id="8c25a223e42a10e9" memberName="speakerSelectBox"
             virtualName="" explicitFocusOrder="0" pos="32 72 160 24" editable="0"
             layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>

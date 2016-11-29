@@ -60,6 +60,10 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	UltraPanAudioProcessor& processor;
+	
+	float x, y, z;
+	float radi, chanHor, chanVer, chanVerS;
+	float baseHor = 450, baseVer = 20;
     //[/UserVariables]
 
     //==============================================================================

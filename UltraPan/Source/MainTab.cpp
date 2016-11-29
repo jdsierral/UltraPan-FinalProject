@@ -77,6 +77,13 @@ void MainTab::paint (Graphics& g)
 
     g.fillAll (Colours::white);
 
+    g.setGradientFill (ColourGradient (Colour (0xff71c100),
+                                       304.0f, 120.0f,
+                                       Colour (0xff4b8100),
+                                       304.0f, 0.0f,
+                                       false));
+    g.fillRect (-9, -3, 617, 131);
+
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
 }
@@ -134,7 +141,10 @@ BEGIN_JUCER_METADATA
                  variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="600"
                  initialHeight="120">
-  <BACKGROUND backgroundColour="ffffffff"/>
+  <BACKGROUND backgroundColour="ffffffff">
+    <RECT pos="-9 -3 617 131" fill="linear: 304 120, 304 0, 0=ff71c100, 1=ff4b8100"
+          hasStroke="0"/>
+  </BACKGROUND>
   <SLIDER name="Main Volume Slider" id="48e517a99b24c0fe" memberName="mainVolSlider"
           virtualName="" explicitFocusOrder="0" pos="512 24 72 80" min="-60"
           max="12" int="0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxBelow"

@@ -25,6 +25,7 @@
 #include "PluginProcessor.h"
 #include "SetupTab.h"
 #include "MainTab.h"
+#include "UltraPanLookAndFeel.h"
 //[/Headers]
 
 
@@ -62,6 +63,11 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     UltraPanAudioProcessor& processor;
+	UltraPanLookAndFeel myLookAndFeel;
+
+	float x, y, z;
+	float radi, chanHor, chanVer, chanVerS;
+	float baseHor = 300, baseVer = 150;
     //[/UserVariables]
 
     //==============================================================================

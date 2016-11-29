@@ -69,6 +69,7 @@ UltraPanAudioProcessorEditor::UltraPanAudioProcessorEditor (UltraPanAudioProcess
 
 
     //[Constructor] You can add your own custom stuff here..
+	setLookAndFeel(&myLookAndFeel);
 	startTimer(50);
     //[/Constructor]
 }
@@ -97,6 +98,13 @@ void UltraPanAudioProcessorEditor::paint (Graphics& g)
 
     g.fillAll (Colours::white);
 
+    g.setGradientFill (ColourGradient (Colour (0xff71c100),
+                                       304.0f, 168.0f,
+                                       Colours::green,
+                                       static_cast<float> (-80), 40.0f,
+                                       true));
+    g.fillRect (-1, -8, 601, 408);
+
     g.setColour (Colours::black);
     g.setFont (Font ("Gill Sans", 43.90f, Font::plain));
     g.drawText (TRANS("JuanSaudio"),
@@ -104,6 +112,34 @@ void UltraPanAudioProcessorEditor::paint (Graphics& g)
                 Justification::centred, true);
 
     //[UserPaint] Add your own custom painting code here..
+
+	//DrawSphere XD
+
+	chanHor = y * (xPosSlider->getMaximum()-x)/(xPosSlider->getMaximum()-xPosSlider->getMinimum());
+	chanVer = - z * (yPosSlider->getMaximum()-x)/(yPosSlider->getMaximum()-yPosSlider->getMinimum());
+	chanVerS= (xPosSlider->getMaximum()-x) * (xPosSlider->getMaximum()-x)/(xPosSlider->getMaximum()-xPosSlider->getMinimum());
+	radi = 15 * (((xPosSlider->getMaximum()-x)/(xPosSlider->getMaximum()-xPosSlider->getMinimum())) * 0.9 + 0.1);
+
+
+	g.setColour (Colour (0xb3000000));
+	g.fillEllipse (baseHor - radi + 5 * chanHor,
+				   baseVer - radi + 2 * chanVerS + 85,
+				   radi * 2,
+				   radi / 2);
+
+	g.setGradientFill (ColourGradient (Colour (0xffb9a384),
+									   baseHor + 5.75 * (chanHor),
+									   baseVer + 5 * (chanVer) - radi,
+									   Colour (0xff574326),
+									   baseHor + 4.25 * (chanHor),
+									   baseVer + 5 * (chanVer) + radi,
+									   true));
+
+	g.fillEllipse (baseHor - radi + 5 * (chanHor),
+				   baseVer - radi + 5 * (chanVer),
+				   radi * 2,
+				   radi * 2);
+
     //[/UserPaint]
 }
 
@@ -129,19 +165,22 @@ void UltraPanAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMove
     if (sliderThatWasMoved == xPosSlider)
     {
         //[UserSliderCode_xPosSlider] -- add your slider handling code here..
-		*processor.xPos = xPosSlider->getValue();
+		y = xPosSlider->getValue();
+		*processor.xPos = y;
         //[/UserSliderCode_xPosSlider]
     }
     else if (sliderThatWasMoved == yPosSlider)
     {
         //[UserSliderCode_yPosSlider] -- add your slider handling code here..
-		*processor.yPos = yPosSlider->getValue();
+		z = yPosSlider->getValue();
+		*processor.yPos = z;
         //[/UserSliderCode_yPosSlider]
     }
     else if (sliderThatWasMoved == zPosSlider)
     {
         //[UserSliderCode_zPosSlider] -- add your slider handling code here..
-		*processor.zPos = zPosSlider->getValue();
+		x = zPosSlider->getValue();
+		*processor.zPos = x;
         //[/UserSliderCode_zPosSlider]
     }
 
@@ -169,8 +208,13 @@ void UltraPanAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void UltraPanAudioProcessorEditor::timerCallback() {
+	if (processor.getGuiFlag()) {
+		repaint();
+	}
 
 }
+
+
 //[/MiscUserCode]
 
 
@@ -189,6 +233,8 @@ BEGIN_JUCER_METADATA
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff">
+    <RECT pos="-1 -8 601 408" fill=" radial: 304 168, -80 40, 0=ff71c100, 1=ff008000"
+          hasStroke="0"/>
     <TEXT pos="39 51 200 30" fill="solid: ff000000" hasStroke="0" text="JuanSaudio"
           fontname="Gill Sans" fontsize="43.899999999999998579" bold="0"
           italic="0" justification="36"/>
