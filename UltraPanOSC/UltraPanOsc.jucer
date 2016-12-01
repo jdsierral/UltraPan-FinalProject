@@ -25,10 +25,12 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX">
+    <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="" externalLibraries="">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="UltraPanOsc"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="UltraPanOsc"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="UltraPanOsc"
+                       libraryPath="" headerPath="/usr/local/include/&#10;"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="UltraPanOsc"
+                       headerPath="/usr/local/include/&#10;"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../../../Juce-Grapefruit/modules"/>

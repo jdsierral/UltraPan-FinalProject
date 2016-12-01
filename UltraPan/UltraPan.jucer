@@ -25,6 +25,8 @@
         <FILE id="PsZk1N" name="MainTab.h" compile="0" resource="0" file="Source/MainTab.h"/>
         <FILE id="GqXyUy" name="SetupTab.cpp" compile="1" resource="0" file="Source/SetupTab.cpp"/>
         <FILE id="I3HxPz" name="SetupTab.h" compile="0" resource="0" file="Source/SetupTab.h"/>
+        <FILE id="bqUoqf" name="OscTab.cpp" compile="1" resource="0" file="Source/OscTab.cpp"/>
+        <FILE id="SXcOk9" name="OscTab.h" compile="0" resource="0" file="Source/OscTab.h"/>
       </GROUP>
       <GROUP id="{9E94E95A-7CB1-E03A-70C4-02185D3B8BA0}" name="DSP">
         <FILE id="yOzfke" name="Dsp.h" compile="0" resource="0" file="Source/Dsp.h"/>
@@ -54,13 +56,15 @@
         <MODULEPATH id="juce_gui_basics" path="../../../../Juce-Grapefruit/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../../Juce-Grapefruit/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_video" path="../../../../Juce-Grapefruit/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../../../Juce-Grapefruit/modules"/>
         <MODULEPATH id="juce_audio_basics" path="../../../../Juce-Grapefruit/modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../../../Juce-Grapefruit/modules"/>
         <MODULEPATH id="juce_audio_formats" path="../../../../Juce-Grapefruit/modules"/>
         <MODULEPATH id="juce_audio_processors" path="../../../../Juce-Grapefruit/modules"/>
         <MODULEPATH id="juce_audio_plugin_client" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_osc" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_box2d" path="../../../../Juce-Grapefruit/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../../Juce-Grapefruit/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
@@ -70,6 +74,8 @@
     <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_box2d" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
@@ -78,7 +84,7 @@
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_osc" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
   <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
 </JUCERPROJECT>

@@ -16,7 +16,7 @@
 UltraPanAudioProcessor::UltraPanAudioProcessor()
      : AudioProcessor (BusesProperties()
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
-                       .withOutput ("Output", AudioChannelSet::discreteChannels(8), true))
+                       .withOutput ("Output", AudioChannelSet::create5point1() , true))
 {
 	auto genCallback = [this] (float newValue) {
 		setGuiFlag();

@@ -20,10 +20,21 @@
 //[Headers] You can add your own extra header files here...
 //[/Headers]
 
+
 #include "PluginEditor.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using namespace gametrak ;
+
+void GameTrakCallback(void *context,
+						   TimeStamp::inttime timestamp,
+						   double leftx, double lefty, double leftz,
+						   double rightx, double righty, double rightz,
+						   bool button)  {
+
+}
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -62,10 +73,28 @@ UltraPanOscAudioProcessorEditor::UltraPanOscAudioProcessorEditor (UltraPanOscAud
     //[/UserPreSize]
 
     setSize (200, 300);
-
-
+	
+	
+	
     //[Constructor] You can add your own custom stuff here..
 	startTimer(50);
+	
+	
+	if (!usePullMode) {
+		gt = GameTrak::create("") ;
+		gt->setGameTrakCallback(GameTrakCallback) ;
+	} else {
+		gt = GameTrak::create("any:?pullMode=true") ;
+	}
+	if (!gt->isGametrakConnected()) {
+		std::cerr << "No Gametrak Connected !" << std::endl ;
+	}
+	//gt= GameTrak::create(argc>1?argv[1]:"any:?debugLevel=1&pictrak=true") ;
+	//gt= GameTrak::create(argc>1?argv[1]:"any:?debugLevel=1&devicePath=USB_05ac_0237_fa120000") ;
+	
+	
+	
+	
     //[/Constructor]
 }
 
@@ -151,19 +180,34 @@ void UltraPanOscAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasM
     }
 
     //[UsersliderValueChanged_Post]
-    //[/UsersliderValueChanged_Post]
+//	if (processor.getGuiFlag()) {
+//		posXSlider->setValue(*processor.posX, dontSendNotification);
+//		posYSlider->setValue(*processor.posY, dontSendNotification);
+//		posZSlider->setValue(*processor.posZ, dontSendNotification);
+//	}
+	//[/UsersliderValueChanged_Post]
 }
 
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void UltraPanOscAudioProcessorEditor::timerCallback() {
-	if (processor.getGuiFlag()) {
-		posXSlider->setValue(*processor.posX, dontSendNotification);
-		posYSlider->setValue(*processor.posY, dontSendNotification);
-		posZSlider->setValue(*processor.posZ, dontSendNotification);
-	}
+	TimeStamp::inttime timestamp;
+	double lX, lY, lZ;
+	double rX, rY, rZ;
+	
+//	while (!button_pressed) {
+//		if (gt) {
+//			gt->getGametrakData(&timestamp,&lX,&lY,&lZ,&rX,&rY,&rZ,&button_pressed);
+//			if (timestamp != last_time) {
+//				printInfo(timestamp,lX,lY,lZ,rX,rY,rZ,button_pressed);
+//				last_time = timestamp;
+//			}
+//		}
+//	}
 }
+
+
 //[/MiscUserCode]
 
 

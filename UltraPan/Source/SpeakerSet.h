@@ -103,6 +103,7 @@ private:
 	Vector3D<float>	sourcePos;
 	OwnedArray<Speaker> speakers;
 	
+	std::vector<float> test = {1, 2, 3, 4, 5};
 	float base;
 	float scale; // maybe it wont be needed;
 	float SR;

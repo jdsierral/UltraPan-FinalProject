@@ -17,16 +17,12 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_766762D71FE39ED6__
-#define __JUCE_HEADER_766762D71FE39ED6__
+#ifndef __JUCE_HEADER_AB5D0B9CFEE158F0__
+#define __JUCE_HEADER_AB5D0B9CFEE158F0__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
-#include "SetupTab.h"
-#include "MainTab.h"
-#include "OscTab.h"
-#include "UltraPanLookAndFeel.h"
 //[/Headers]
 
 
@@ -39,52 +35,48 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class UltraPanAudioProcessorEditor  : public AudioProcessorEditor,
-                                      public Timer,
-                                      public SliderListener,
-                                      public ButtonListener
+class OscTab  : public Component,
+                private OSCReceiver,
+                private OSCReceiver::ListenerWithOSCAddress<OSCReceiver::MessageLoopCallback>,
+                public ButtonListener
 {
 public:
     //==============================================================================
-    UltraPanAudioProcessorEditor (UltraPanAudioProcessor& p);
-    ~UltraPanAudioProcessorEditor();
+    OscTab (UltraPanAudioProcessor& p);
+    ~OscTab();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-	void timerCallback() override;
-    //[/UserMethods]
+	
+	void oscMessageReceived (const OSCMessage& message) override;
+	void showConnectionErrorMessage (const String& messageText);
+	//[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    UltraPanAudioProcessor& processor;
-	UltraPanLookAndFeel myLookAndFeel;
-
-	float x, y, z;
-	float radi, chanHor, chanVer, chanVerS;
-	float baseHor = 300, baseVer = 150;
-
+	UltraPanAudioProcessor& processor;
+	bool status;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> xPosSlider;
-    ScopedPointer<Slider> yPosSlider;
-    ScopedPointer<Slider> zPosSlider;
-    ScopedPointer<TabbedComponent> tabs;
-    ScopedPointer<ToggleButton> toggleButton;
+    ScopedPointer<TextButton> connectButton;
+    ScopedPointer<TextEditor> portTextEditor;
+    ScopedPointer<ToggleButton> gameTrakToggle;
+    ScopedPointer<ToggleButton> leapToggle;
+    ScopedPointer<ToggleButton> customToggle;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UltraPanAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscTab)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_766762D71FE39ED6__
+#endif   // __JUCE_HEADER_AB5D0B9CFEE158F0__

@@ -55,6 +55,7 @@ UltraPanAudioProcessorEditor::UltraPanAudioProcessorEditor (UltraPanAudioProcess
     tabs->setTabBarDepth (24);
     tabs->addTab (TRANS("Main"), Colours::lightgrey, new MainTab (processor), true);
     tabs->addTab (TRANS("Config"), Colours::lightgrey, new SetupTab (processor), true);
+    tabs->addTab (TRANS("Osc"), Colours::lightgrey, new OscTab (processor), true);
     tabs->setCurrentTabIndex (0);
 
     addAndMakeVisible (toggleButton = new ToggleButton ("new toggle button"));
@@ -209,6 +210,9 @@ void UltraPanAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void UltraPanAudioProcessorEditor::timerCallback() {
 	if (processor.getGuiFlag()) {
+		xPosSlider->setValue(y = *processor.xPos, dontSendNotification);
+		yPosSlider->setValue(z = *processor.yPos, dontSendNotification);
+		zPosSlider->setValue(x = *processor.zPos, dontSendNotification);
 		repaint();
 	}
 
@@ -260,6 +264,8 @@ BEGIN_JUCER_METADATA
     <TAB name="Main" colour="ffd3d3d3" useJucerComp="0" contentClassName="MainTab"
          constructorParams="processor" jucerComponentFile=""/>
     <TAB name="Config" colour="ffd3d3d3" useJucerComp="0" contentClassName="SetupTab"
+         constructorParams="processor" jucerComponentFile=""/>
+    <TAB name="Osc" colour="ffd3d3d3" useJucerComp="0" contentClassName="OscTab"
          constructorParams="processor" jucerComponentFile=""/>
   </TABBEDCOMPONENT>
   <TOGGLEBUTTON name="new toggle button" id="8adcb962da3936e4" memberName="toggleButton"

@@ -146,19 +146,19 @@ void SetupTab::paint (Graphics& g)
     g.fillRect (-9, -3, 617, 131);
 
     //[UserPaint] Add your own custom painting code here..
-	
+
 	chanHor = y * (speakerPosXSlider->getMaximum()-x)/(speakerPosXSlider->getMaximum()-speakerPosXSlider->getMinimum());
 	chanVer = - z * (speakerPosYSlider->getMaximum()-x)/(speakerPosYSlider->getMaximum()-speakerPosYSlider->getMinimum());
 	chanVerS= (speakerPosYSlider->getMaximum()-x) * (speakerPosYSlider->getMaximum()-x)/(speakerPosXSlider->getMaximum()-speakerPosXSlider->getMinimum());
 	radi = 15 * (((speakerPosXSlider->getMaximum()-x)/(speakerPosXSlider->getMaximum()-speakerPosXSlider->getMinimum())) * 0.9 + 0.1);
-	
-	
+
+
 	g.setColour (Colour (0xb3000000));
 	g.fillEllipse (baseHor - radi + 5 * chanHor,
 				   baseVer - radi + 2 * chanVerS + 85,
 				   radi * 2,
 				   radi / 2);
-	
+
 	g.setGradientFill (ColourGradient (Colour (0xffb9a384),
 									   baseHor + 5.75 * (chanHor),
 									   baseVer + 5 * (chanVer) - radi,
@@ -166,13 +166,13 @@ void SetupTab::paint (Graphics& g)
 									   baseHor + 4.25 * (chanHor),
 									   baseVer + 5 * (chanVer) + radi,
 									   true));
-	
+
 	g.fillEllipse (baseHor - radi + 5 * (chanHor),
 				   baseVer - radi + 5 * (chanVer),
 				   radi * 2,
 				   radi * 2);
-	
-	//[/UserPaint]
+
+    //[/UserPaint]
 }
 
 void SetupTab::resized()
@@ -209,11 +209,11 @@ void SetupTab::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 		y = speakerPos.x;
 		z = speakerPos.y;
 		x = speakerPos.z;
-		
+
 		speakerPosXSlider->setValue(y, dontSendNotification);
 		speakerPosYSlider->setValue(z, dontSendNotification);
 		speakerPosZSlider->setValue(x, dontSendNotification);
-		
+
         //[/UserComboBoxCode_speakerSelectBox]
     }
 
@@ -349,7 +349,7 @@ void SetupTab::buttonClicked (Button* buttonThatWasClicked)
 		"\nPos: " << pos.x << ", " << pos.y << ", " << pos.z << ", " <<
 		"\nGain: " << gain <<
 		"\ndelay: " << delay);
-	
+
 	repaint();
     //[/UserbuttonClicked_Post]
 }

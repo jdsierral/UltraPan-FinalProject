@@ -59,7 +59,7 @@ UltraPanOscAudioProcessor::UltraPanOscAudioProcessor()
 	if (! sender.connect(address, udpPort))
 		msgError("Connection ˆ&*( up... run for your lives");
 	
-	if (! connect(udpPort + 64))
+	if (! connect(6448))
 		msgError("Not Receiving... sssooooorryyy");
 	
 	OSCReceiver::addListener(this, "/UltraPan/" + String(processorID));
