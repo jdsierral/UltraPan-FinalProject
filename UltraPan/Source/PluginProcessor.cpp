@@ -372,6 +372,9 @@ void UltraPanAudioProcessor::getStateInformation (MemoryBlock& destData)
 	
 	config.setAttribute("NumIns",  ins);
 	config.setAttribute("NumOuts", outs);
+
+   config.setAttribute(mainVol->paramID, *mainVol);
+   config.setAttribute(base->paramID, *base);
 	
 	//===================================
 	config.setAttribute(pos1X->paramID, *pos1X);
@@ -406,6 +409,9 @@ void UltraPanAudioProcessor::setStateInformation (const void* data, int sizeInBy
 			
 			const int ins = xml->getDoubleAttribute("NumIns");
 			const int outs= xml->getDoubleAttribute("NumOuts");
+
+        *mainVol =  xml->getDoubleAttribute(mainVol->paramID);
+        *base = xml->getDoubleAttribute(base->paramID);
 				*pos1X = xml->getDoubleAttribute(pos1X->paramID);
 				*pos1Y = xml->getDoubleAttribute(pos1Y->paramID);
 				*pos1Z = xml->getDoubleAttribute(pos1Z->paramID);
