@@ -23,6 +23,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "SpecialDrawing.H"
 //[/Headers]
 
 
@@ -37,8 +38,7 @@
 */
 class SetupTab  : public Component,
                   public ComboBoxListener,
-                  public SliderListener,
-                  public ButtonListener
+                  public SliderListener
 {
 public:
     //==============================================================================
@@ -47,21 +47,25 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+	void update();
+	void updateNumChannels(int ins, int outs);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
-    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	UltraPanAudioProcessor& processor;
+	
+	SpDraw speaker;
 
-	float x, y, z;
+	Vector3D<float> speakerPos;
+	float sliderRange = 10;
 	float radi, chanHor, chanVer, chanVerS;
 	float baseHor = 450, baseVer = 20;
     //[/UserVariables]
@@ -71,14 +75,6 @@ private:
     ScopedPointer<Slider> speakerPosXSlider;
     ScopedPointer<Slider> speakerPosYSlider;
     ScopedPointer<Slider> speakerPosZSlider;
-    ScopedPointer<TextButton> _1;
-    ScopedPointer<TextButton> _2;
-    ScopedPointer<TextButton> _3;
-    ScopedPointer<TextButton> _4;
-    ScopedPointer<TextButton> _5;
-    ScopedPointer<TextButton> _6;
-    ScopedPointer<TextButton> _7;
-    ScopedPointer<TextButton> _8;
 
 
     //==============================================================================

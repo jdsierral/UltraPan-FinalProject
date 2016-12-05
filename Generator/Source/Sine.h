@@ -1,11 +1,12 @@
 //----------------------------------------------------------
-// author: "JuanSaudio"
 // name: "DSP"
+// author: "JuanSaudio"
 //
 // Code generated with Faust 0.9.92 (http://faust.grame.fr)
 //----------------------------------------------------------
 
 /* link with  */
+#include <math.h>
 // Music 256a / CS 476a | fall 2016
 // CCRMA, Stanford University
 //
@@ -42,7 +43,6 @@
 #include <map>
 #include <string.h>
 #include <stdlib.h>
-#include "math.h"
 
 /************************************************************************
  ************************************************************************
@@ -656,27 +656,31 @@ class decorator_dsp : public dsp {
 
 
 #ifndef FAUSTCLASS 
-#define FAUSTCLASS Dsp
+#define FAUSTCLASS SineOsc
 #endif
 
-class Dsp : public dsp {
+class SineOsc : public dsp {
   private:
-	int 	IOTA;
-	float 	fVec0[65536];
+	int 	iVec0[2];
+	float 	fConst0;
 	FAUSTFLOAT 	fslider0;
+	float 	fRec2[2];
 	float 	fRec0[2];
-	FAUSTFLOAT 	fslider1;
 	float 	fRec1[2];
+	FAUSTFLOAT 	fslider1;
+	float 	fRec3[2];
 	int fSamplingFreq;
 
   public:
 	virtual void metadata(Meta* m) { 
+		m->declare("name", "DSP");
 		m->declare("author", "JuanSaudio");
-		m->declare("delay.lib/name", "Faust Delay Library");
-		m->declare("delay.lib/version", "0.0");
+		m->declare("miscoscillator.lib/name", "Faust Oscillator Library");
+		m->declare("miscoscillator.lib/version", "0.0");
 		m->declare("signal.lib/name", "Faust Signal Routing Library");
 		m->declare("signal.lib/version", "0.0");
-		m->declare("name", "DSP");
+		m->declare("filter.lib/name", "Faust Filter Library");
+		m->declare("filter.lib/version", "2.0");
 		m->declare("math.lib/name", "Faust Math Library");
 		m->declare("math.lib/version", "2.0");
 		m->declare("math.lib/author", "GRAME");
@@ -684,22 +688,24 @@ class Dsp : public dsp {
 		m->declare("math.lib/license", "LGPL with exception");
 	}
 
-	virtual int getNumInputs() { return 1; }
+	virtual int getNumInputs() { return 0; }
 	virtual int getNumOutputs() { return 1; }
 	static void classInit(int samplingFreq) {
 	}
 	virtual void instanceConstants(int samplingFreq) {
 		fSamplingFreq = samplingFreq;
+		fConst0 = (6.2831855f / min(1.92e+05f, max(1.0f, (float)fSamplingFreq)));
 	}
 	virtual void instanceResetUserInterface() {
-		fslider0 = 0.01f;
+		fslider0 = 1e+03f;
 		fslider1 = 1.0f;
 	}
 	virtual void instanceClear() {
-		IOTA = 0;
-		for (int i=0; i<65536; i++) fVec0[i] = 0;
+		for (int i=0; i<2; i++) iVec0[i] = 0;
+		for (int i=0; i<2; i++) fRec2[i] = 0;
 		for (int i=0; i<2; i++) fRec0[i] = 0;
 		for (int i=0; i<2; i++) fRec1[i] = 0;
+		for (int i=0; i<2; i++) fRec3[i] = 0;
 	}
 	virtual void init(int samplingFreq) {
 		classInit(samplingFreq);
@@ -710,35 +716,38 @@ class Dsp : public dsp {
 		instanceResetUserInterface();
 		instanceClear();
 	}
-	virtual Dsp* clone() {
-		return new Dsp();
+	virtual SineOsc* clone() {
+		return new SineOsc();
 	}
 	virtual int getSampleRate() {
 		return fSamplingFreq;
 	}
 	virtual void buildUserInterface(UI* ui_interface) {
-		ui_interface->openHorizontalBox("Sp");
-		ui_interface->addHorizontalSlider("delay", &fslider0, 0.01f, 0.01f, 65536.0f, 0.01f);
+		ui_interface->openHorizontalBox("Sine");
+		ui_interface->addHorizontalSlider("freq", &fslider0, 1e+03f, 0.0f, 2e+04f, 1.0f);
 		ui_interface->addHorizontalSlider("gain", &fslider1, 1.0f, 0.0f, 1.0f, 0.01f);
 		ui_interface->closeBox();
 	}
 	virtual void compute (int count, FAUSTFLOAT** input, FAUSTFLOAT** output) {
 		float 	fSlow0 = (0.001f * float(fslider0));
 		float 	fSlow1 = (0.001f * float(fslider1));
-		FAUSTFLOAT* input0 = input[0];
 		FAUSTFLOAT* output0 = output[0];
 		for (int i=0; i<count; i++) {
-			float fTemp0 = (float)input0[i];
-			fVec0[IOTA&65535] = fTemp0;
-			fRec0[0] = (fSlow0 + (0.999f * fRec0[1]));
-			int iTemp1 = int(fRec0[0]);
-			float fTemp2 = floorf(fRec0[0]);
-			fRec1[0] = (fSlow1 + (0.999f * fRec1[1]));
-			output0[i] = (FAUSTFLOAT)(((fVec0[(IOTA-int((iTemp1 & 65535)))&65535] * (fTemp2 + (1 - fRec0[0]))) + ((fRec0[0] - fTemp2) * fVec0[(IOTA-int((int((iTemp1 + 1)) & 65535)))&65535])) * fRec1[0]);
+			iVec0[0] = 1;
+			fRec2[0] = (fSlow0 + (0.999f * fRec2[1]));
+			float fTemp0 = (fConst0 * fRec2[0]);
+			float fTemp1 = sinf(fTemp0);
+			float fTemp2 = cosf(fTemp0);
+			fRec0[0] = ((fRec1[1] * fTemp1) + (fRec0[1] * fTemp2));
+			fRec1[0] = (((fRec1[1] * fTemp2) + (fRec0[1] * (0 - fTemp1))) + (1 - iVec0[1]));
+			fRec3[0] = (fSlow1 + (0.999f * fRec3[1]));
+			output0[i] = (FAUSTFLOAT)(fRec0[0] * fRec3[0]);
 			// post processing
+			fRec3[1] = fRec3[0];
 			fRec1[1] = fRec1[0];
 			fRec0[1] = fRec0[0];
-			IOTA = IOTA+1;
+			fRec2[1] = fRec2[0];
+			iVec0[1] = iVec0[0];
 		}
 	}
 };

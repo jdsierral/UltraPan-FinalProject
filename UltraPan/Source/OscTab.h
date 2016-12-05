@@ -23,6 +23,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "Conversion.h"
 //[/Headers]
 
 
@@ -38,7 +39,8 @@
 class OscTab  : public Component,
                 private OSCReceiver,
                 private OSCReceiver::ListenerWithOSCAddress<OSCReceiver::MessageLoopCallback>,
-                public ButtonListener
+                public ButtonListener,
+                public ComboBoxListener
 {
 public:
     //==============================================================================
@@ -47,14 +49,24 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-	
+	enum TypeCoord {
+		cart,
+		polar
+	};
+
 	void oscMessageReceived (const OSCMessage& message) override;
 	void showConnectionErrorMessage (const String& messageText);
-	//[/UserMethods]
+
+	void update();
+	void updateNumChannels(int ins, int outs);
+
+    //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
     void buttonClicked (Button* buttonThatWasClicked) override;
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+    void visibilityChanged() override;
 
 
 
@@ -62,14 +74,22 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	UltraPanAudioProcessor& processor;
 	bool status;
+	int udpPort = 6448;
+	TypeCoord typeCoord = polar;
+	double azimuL = 1, elevaL = 1, depthL = 1;
+	double azimuR = 1, elevaR = 1, depthR = 1;
+
+	Vector3D<double> posL, posR, deltaL, deltaR;
+
     //[/UserVariables]
 
     //==============================================================================
     ScopedPointer<TextButton> connectButton;
-    ScopedPointer<TextEditor> portTextEditor;
     ScopedPointer<ToggleButton> gameTrakToggle;
     ScopedPointer<ToggleButton> leapToggle;
     ScopedPointer<ToggleButton> customToggle;
+    ScopedPointer<ComboBox> portBox;
+    ScopedPointer<TextButton> calButton;
 
 
     //==============================================================================

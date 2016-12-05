@@ -19,6 +19,9 @@
         <FILE id="upH5Ej" name="PluginParams.h" compile="0" resource="0" file="Source/PluginParams.h"/>
       </GROUP>
       <GROUP id="{9A8C792E-2671-33B6-16FF-E9EB4628467D}" name="GUI">
+        <FILE id="H5gcVU" name="SpecialDrawing.h" compile="0" resource="0"
+              file="Source/SpecialDrawing.h"/>
+        <FILE id="Ee8Y9H" name="Conversion.h" compile="0" resource="0" file="Source/Conversion.h"/>
         <FILE id="ScRWsN" name="UltraPanLookAndFeel.h" compile="0" resource="0"
               file="Source/UltraPanLookAndFeel.h"/>
         <FILE id="yDIhim" name="MainTab.cpp" compile="1" resource="0" file="Source/MainTab.cpp"/>
@@ -30,6 +33,8 @@
       </GROUP>
       <GROUP id="{9E94E95A-7CB1-E03A-70C4-02185D3B8BA0}" name="DSP">
         <FILE id="yOzfke" name="Dsp.h" compile="0" resource="0" file="Source/Dsp.h"/>
+        <FILE id="O537Cd" name="SourceSet.cpp" compile="1" resource="0" file="Source/SourceSet.cpp"/>
+        <FILE id="OIvns9" name="SourceSet.h" compile="0" resource="0" file="Source/SourceSet.h"/>
         <FILE id="r55DKT" name="SpeakerSet.cpp" compile="1" resource="0" file="Source/SpeakerSet.cpp"/>
         <FILE id="ouQG0A" name="SpeakerSet.h" compile="0" resource="0" file="Source/SpeakerSet.h"/>
       </GROUP>

@@ -12,35 +12,30 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "PluginParams.h"
-#include "SpeakerSet.h"
+#include "Sine.h"
+#include "Pink.h"
+
+
 
 
 //==============================================================================
 /**
 */
-class UltraPanAudioProcessor  : public AudioProcessor
-//								, public OSCReceiver,
-//public OSCReceiver::ListenerWithOSCAddress<OSCReceiver::MessageLoopCallback>
-
+class GeneratorAudioProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-    UltraPanAudioProcessor();
-    ~UltraPanAudioProcessor();
+    GeneratorAudioProcessor();
+    ~GeneratorAudioProcessor();
 
     //==============================================================================
-	void numChannelsChanged() override;
-	#ifndef JucePlugin_PreferredChannelConfigurations
-	bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-	#endif
-	bool canAddBus(bool isInputBus) const override;
-	bool canRemoveBus(bool isInputBus) const override;
-	
-    //==============================================================================
-	
-	void prepareToPlay (double sampleRate, int samplesPerBlock) override;
-	void releaseResources() override;
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void releaseResources() override;
+
+   #ifndef JucePlugin_PreferredChannelConfigurations
+    bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
+   #endif
+
     void processBlock (AudioSampleBuffer&, MidiBuffer&) override;
 
     //==============================================================================
@@ -64,58 +59,54 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+	
+	//==============================================================================
+	//==============================================================================
+	
+	void setGuiFlag()	{ guiFlag = true; }
+	void clearGuiFlag() { guiFlag = false;}
+	bool getGuiFlag()	{ return guiFlag; }
 
 	//==============================================================================
 	//==============================================================================
+
+	AudioParameterFloat*  gain;
+	AudioParameterFloat*  freq;
+	AudioParameterChoice* type;
+	
+
 	//==============================================================================
-	
-	void clearGuiFlag() { guiFlag = false;}
-	void setGuiFlag()	{ guiFlag = true;}
-	bool getGuiFlag()	{ return guiFlag;}
-	
 	//==============================================================================
-	
-	
-	void setSpeakerPos(int sp, Vector3D<float> newSpeakerPos);
-	void setSpeakerPosX(int sp, float newPosX);
-	void setSpeakerPosY(int sp, float newPosY);
-	void setSpeakerPosZ(int sp, float newPosZ);
-	void setBase(float newBase);
-	
-	//==============================================================================
-	
-	Vector3D<float> getSourcePos (int sc);
-	Vector3D<float> getSpeakerPos (int sp);
-	float getSpeakerPosX(int sp, float newPosX);
-	float getSpeakerPosY(int sp, float newPosX);
-	float getSpeakerPosZ(int sp, float newPosX);
-	
-	//==============================================================================
-	
-	AudioParameterCustomBool* bypass;
-	AudioParameterCustomFloat* mainVol;
-	AudioParameterCustomFloat* base;
-	
-	AudioParameterCustomFloat* pos1X;
-	AudioParameterCustomFloat* pos1Y;
-	AudioParameterCustomFloat* pos1Z;
-	
-	AudioParameterCustomFloat* pos2X;
-	AudioParameterCustomFloat* pos2Y;
-	AudioParameterCustomFloat* pos2Z;
-	
 private:
+	//==============================================================================
+	
+	enum types {
+		sine,
+		white,
+		pink
+	};
+	
 	bool guiFlag;
-	float mainVolVal;
+	
+	SineOsc sineOsc;
+	MapUI sineParams;
+	Random noise;
+	PinkNoise pinkNoise;
+	
+	StringArray typesInit () {
+		StringArray t;
+		t.add("Sine");
+		t.add("White");
+		t.add("Pink");
+		return t;
+	}
+	
 	
 	//==============================================================================
-	//==============================================================================
 	
-	OwnedArray<SpeakerSet> speakerSet;
-	std::vector<AudioSampleBuffer> tempIn;
-		
+	
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UltraPanAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GeneratorAudioProcessor)
 };
 
 

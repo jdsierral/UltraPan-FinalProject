@@ -21,7 +21,7 @@ void SpeakerSet::init(int sampleRate) {
 	SR = sampleRate;
 	for (int sp = 0; sp < totalNumSpeakers; sp++) {
 		speakers[sp]->init(SR);
-		speakers[sp]->name = String("Speaker " + String(sp));
+		speakers[sp]->name = String("speaker" + String(sp));
 	}
 }
 

@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+
 //[/Headers]
 
 #include "PluginEditor.h"
@@ -28,39 +29,21 @@
 
 //==============================================================================
 UltraPanAudioProcessorEditor::UltraPanAudioProcessorEditor (UltraPanAudioProcessor& p)
-    : AudioProcessorEditor(&p), processor(p)
+    : AudioProcessorEditor(&p), processor(p), ins(processor.getTotalNumInputChannels()), outs(processor.getTotalNumOutputChannels())
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    addAndMakeVisible (xPosSlider = new Slider ("X Pos Slider"));
-    xPosSlider->setRange (-10, 10, 0);
-    xPosSlider->setSliderStyle (Slider::LinearHorizontal);
-    xPosSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    xPosSlider->addListener (this);
-
-    addAndMakeVisible (yPosSlider = new Slider ("Y Pos Slider"));
-    yPosSlider->setRange (-10, 10, 0);
-    yPosSlider->setSliderStyle (Slider::LinearHorizontal);
-    yPosSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    yPosSlider->addListener (this);
-
-    addAndMakeVisible (zPosSlider = new Slider ("Z Pos Slider"));
-    zPosSlider->setRange (-10, 10, 0);
-    zPosSlider->setSliderStyle (Slider::LinearHorizontal);
-    zPosSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    zPosSlider->addListener (this);
-
     addAndMakeVisible (tabs = new TabbedComponent (TabbedButtonBar::TabsAtTop));
     tabs->setTabBarDepth (24);
-    tabs->addTab (TRANS("Main"), Colours::lightgrey, new MainTab (processor), true);
-    tabs->addTab (TRANS("Config"), Colours::lightgrey, new SetupTab (processor), true);
-    tabs->addTab (TRANS("Osc"), Colours::lightgrey, new OscTab (processor), true);
+    tabs->addTab (TRANS("Main"), Colour (0x89003271), new MainTab (processor), true);
+    tabs->addTab (TRANS("Config"), Colour (0x89003271), new SetupTab (processor), true);
+    tabs->addTab (TRANS("Osc"), Colour (0x89003271), new OscTab (processor), true);
     tabs->setCurrentTabIndex (0);
 
-    addAndMakeVisible (toggleButton = new ToggleButton ("new toggle button"));
-    toggleButton->setButtonText (TRANS("bypass"));
-    toggleButton->addListener (this);
+    addAndMakeVisible (bypassButton = new ToggleButton ("Bypass Button"));
+    bypassButton->setButtonText (TRANS("bypass"));
+    bypassButton->addListener (this);
 
 
     //[UserPreSize]
@@ -70,7 +53,52 @@ UltraPanAudioProcessorEditor::UltraPanAudioProcessorEditor (UltraPanAudioProcess
 
 
     //[Constructor] You can add your own custom stuff here..
+
+	sourcePos.resize(ins);
+	speakerPos.resize(outs);
+
 	setLookAndFeel(&myLookAndFeel);
+
+	mainTab = static_cast<MainTab*>(tabs->getTabContentComponent(0));
+	setupTab = (SetupTab*)tabs->getTabContentComponent(1);
+	oscTab = (OscTab*)tabs->getTabContentComponent(2);
+
+	sourceDraw.resize(ins);
+	speakerDraw.resize(outs);
+
+//	jassert(isPositiveAndNotGreaterThan(sourceDraw.size(), processor.getTotalNumInputChannels()));
+//	jassert(isPositiveAndNotGreaterThan(speakerDraw.size(), processor.getTotalNumOutputChannels()));
+
+	for (int in = 0; in < sourceDraw.size(); in++) {
+		sourceDraw[in].setBases(300, 150);
+		sourceDraw[in].setMaxAndMinValues(sliderRange,
+										  -sliderRange,
+										  sliderRange,
+										  -sliderRange,
+										  sliderRange,
+										  -sliderRange);
+		sourceDraw[in].setRadius(15);
+		if (in == 0)
+			sourceDraw[in].setColour(Colours::red);
+		if (in == 1)
+			sourceDraw[in].setColour(Colours::blue);
+	}
+
+
+	for (int out = 0; out < speakerDraw.size(); out++) {
+		speakerDraw[out].setBases(300, 150);
+		speakerDraw[out].setMaxAndMinValues(sliderRange,
+										   -sliderRange,
+										   sliderRange,
+										   -sliderRange,
+										   sliderRange,
+										   -sliderRange);
+		speakerDraw[out].setRadius(15);
+		speakerDraw[out].setColour(Colour (0xff0049a5));
+	}
+
+	update();
+
 	startTimer(50);
     //[/Constructor]
 }
@@ -80,11 +108,8 @@ UltraPanAudioProcessorEditor::~UltraPanAudioProcessorEditor()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
-    xPosSlider = nullptr;
-    yPosSlider = nullptr;
-    zPosSlider = nullptr;
     tabs = nullptr;
-    toggleButton = nullptr;
+    bypassButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -116,30 +141,19 @@ void UltraPanAudioProcessorEditor::paint (Graphics& g)
 
 	//DrawSphere XD
 
-	chanHor = y * (xPosSlider->getMaximum()-x)/(xPosSlider->getMaximum()-xPosSlider->getMinimum());
-	chanVer = - z * (yPosSlider->getMaximum()-x)/(yPosSlider->getMaximum()-yPosSlider->getMinimum());
-	chanVerS= (xPosSlider->getMaximum()-x) * (xPosSlider->getMaximum()-x)/(xPosSlider->getMaximum()-xPosSlider->getMinimum());
-	radi = 15 * (((xPosSlider->getMaximum()-x)/(xPosSlider->getMaximum()-xPosSlider->getMinimum())) * 0.9 + 0.1);
+	for (int in = 0; in < sourceDraw.size(); in++){
+		sourceDraw[in].drawCoordSphere(g,
+									   sourcePos[in].x,
+									   sourcePos[in].y,
+									   sourcePos[in].z);
+	}
 
-
-	g.setColour (Colour (0xb3000000));
-	g.fillEllipse (baseHor - radi + 5 * chanHor,
-				   baseVer - radi + 2 * chanVerS + 85,
-				   radi * 2,
-				   radi / 2);
-
-	g.setGradientFill (ColourGradient (Colour (0xffb9a384),
-									   baseHor + 5.75 * (chanHor),
-									   baseVer + 5 * (chanVer) - radi,
-									   Colour (0xff574326),
-									   baseHor + 4.25 * (chanHor),
-									   baseVer + 5 * (chanVer) + radi,
-									   true));
-
-	g.fillEllipse (baseHor - radi + 5 * (chanHor),
-				   baseVer - radi + 5 * (chanVer),
-				   radi * 2,
-				   radi * 2);
+	for (int out = 0; out < speakerDraw.size(); out++) {
+		speakerDraw[out].drawCoordSphere(g,
+										 speakerPos[out].x,
+										 speakerPos[out].y,
+										 speakerPos[out].z);
+	}
 
     //[/UserPaint]
 }
@@ -149,44 +163,10 @@ void UltraPanAudioProcessorEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    xPosSlider->setBounds (24, 120, 150, 32);
-    yPosSlider->setBounds (24, 152, 150, 32);
-    zPosSlider->setBounds (24, 184, 150, 32);
     tabs->setBounds (0, 256, 600, 144);
-    toggleButton->setBounds (528, 0, 72, 24);
+    bypassButton->setBounds (528, 0, 72, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
-}
-
-void UltraPanAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
-{
-    //[UsersliderValueChanged_Pre]
-    //[/UsersliderValueChanged_Pre]
-
-    if (sliderThatWasMoved == xPosSlider)
-    {
-        //[UserSliderCode_xPosSlider] -- add your slider handling code here..
-		y = xPosSlider->getValue();
-		*processor.xPos = y;
-        //[/UserSliderCode_xPosSlider]
-    }
-    else if (sliderThatWasMoved == yPosSlider)
-    {
-        //[UserSliderCode_yPosSlider] -- add your slider handling code here..
-		z = yPosSlider->getValue();
-		*processor.yPos = z;
-        //[/UserSliderCode_yPosSlider]
-    }
-    else if (sliderThatWasMoved == zPosSlider)
-    {
-        //[UserSliderCode_zPosSlider] -- add your slider handling code here..
-		x = zPosSlider->getValue();
-		*processor.zPos = x;
-        //[/UserSliderCode_zPosSlider]
-    }
-
-    //[UsersliderValueChanged_Post]
-    //[/UsersliderValueChanged_Post]
 }
 
 void UltraPanAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
@@ -194,11 +174,11 @@ void UltraPanAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == toggleButton)
+    if (buttonThatWasClicked == bypassButton)
     {
-        //[UserButtonCode_toggleButton] -- add your button handler code here..
-		*processor.bypass = toggleButton->getToggleState();
-        //[/UserButtonCode_toggleButton]
+        //[UserButtonCode_bypassButton] -- add your button handler code here..
+		*processor.bypass = bypassButton->getToggleState();
+        //[/UserButtonCode_bypassButton]
     }
 
     //[UserbuttonClicked_Post]
@@ -210,15 +190,64 @@ void UltraPanAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void UltraPanAudioProcessorEditor::timerCallback() {
 	if (processor.getGuiFlag()) {
-		xPosSlider->setValue(y = *processor.xPos, dontSendNotification);
-		yPosSlider->setValue(z = *processor.yPos, dontSendNotification);
-		zPosSlider->setValue(x = *processor.zPos, dontSendNotification);
+		mainTab->update();
+		setupTab->update();
+		oscTab->update();
+		update();
 		repaint();
+	}
+}
+
+void UltraPanAudioProcessorEditor::update() {
+	bypassButton->setToggleState(*processor.bypass, dontSendNotification);
+	for (int in = 0; in < ins; in++) {
+		sourcePos[in] = processor.getSourcePos(in);
+	}
+
+	for (int out = 0; out < outs; out++) {
+		speakerPos[out] = processor.getSpeakerPos(out);
 	}
 
 }
 
-
+void UltraPanAudioProcessorEditor::updateNumChannels(int ins, int outs) {
+	sourcePos.resize(ins);
+	speakerPos.resize(outs);
+	sourceDraw.resize(ins);
+	speakerDraw.resize(outs);
+	
+	for (int in = 0; in < sourceDraw.size(); in++) {
+		sourceDraw[in].setBases(300, 150);
+		sourceDraw[in].setMaxAndMinValues(sliderRange,
+										  -sliderRange,
+										  sliderRange,
+										  -sliderRange,
+										  sliderRange,
+										  -sliderRange);
+		sourceDraw[in].setRadius(15);
+		if (in == 0)
+			sourceDraw[in].setColour(Colours::red);
+		if (in == 1)
+			sourceDraw[in].setColour(Colours::blue);
+	}
+	
+	for (int out = 0; out < speakerDraw.size(); out++) {
+		speakerDraw[out].setBases(300, 150);
+		speakerDraw[out].setMaxAndMinValues(sliderRange,
+											-sliderRange,
+											sliderRange,
+											-sliderRange,
+											sliderRange,
+											-sliderRange);
+		speakerDraw[out].setRadius(15);
+		speakerDraw[out].setColour(Colour (0xff0049a5));
+	}
+	mainTab->updateNumChannels(ins, outs);
+	setupTab->updateNumChannels(ins, outs);
+	oscTab->updateNumChannels(ins, outs);
+	
+	update();
+}
 //[/MiscUserCode]
 
 
@@ -233,7 +262,7 @@ BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="UltraPanAudioProcessorEditor"
                  componentName="" parentClasses="public AudioProcessorEditor, public Timer"
-                 constructorParams="UltraPanAudioProcessor&amp; p" variableInitialisers="AudioProcessorEditor(&amp;p), processor(p)"
+                 constructorParams="UltraPanAudioProcessor&amp; p" variableInitialisers="AudioProcessorEditor(&amp;p), processor(p), ins(processor.getTotalNumInputChannels()), outs(processor.getTotalNumOutputChannels())"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff">
@@ -243,32 +272,17 @@ BEGIN_JUCER_METADATA
           fontname="Gill Sans" fontsize="43.899999999999998579" bold="0"
           italic="0" justification="36"/>
   </BACKGROUND>
-  <SLIDER name="X Pos Slider" id="4c5e01c12c9ae086" memberName="xPosSlider"
-          virtualName="" explicitFocusOrder="0" pos="24 120 150 32" min="-10"
-          max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
-  <SLIDER name="Y Pos Slider" id="5082a310d30c270b" memberName="yPosSlider"
-          virtualName="" explicitFocusOrder="0" pos="24 152 150 32" min="-10"
-          max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
-  <SLIDER name="Z Pos Slider" id="b4b331794686aab3" memberName="zPosSlider"
-          virtualName="" explicitFocusOrder="0" pos="24 184 150 32" min="-10"
-          max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
   <TABBEDCOMPONENT name="Tab Component" id="2ec337020e87f883" memberName="tabs"
                    virtualName="" explicitFocusOrder="0" pos="0 256 600 144" orientation="top"
                    tabBarDepth="24" initialTab="0">
-    <TAB name="Main" colour="ffd3d3d3" useJucerComp="0" contentClassName="MainTab"
+    <TAB name="Main" colour="89003271" useJucerComp="0" contentClassName="MainTab"
          constructorParams="processor" jucerComponentFile=""/>
-    <TAB name="Config" colour="ffd3d3d3" useJucerComp="0" contentClassName="SetupTab"
+    <TAB name="Config" colour="89003271" useJucerComp="0" contentClassName="SetupTab"
          constructorParams="processor" jucerComponentFile=""/>
-    <TAB name="Osc" colour="ffd3d3d3" useJucerComp="0" contentClassName="OscTab"
+    <TAB name="Osc" colour="89003271" useJucerComp="0" contentClassName="OscTab"
          constructorParams="processor" jucerComponentFile=""/>
   </TABBEDCOMPONENT>
-  <TOGGLEBUTTON name="new toggle button" id="8adcb962da3936e4" memberName="toggleButton"
+  <TOGGLEBUTTON name="Bypass Button" id="8adcb962da3936e4" memberName="bypassButton"
                 virtualName="" explicitFocusOrder="0" pos="528 0 72 24" buttonText="bypass"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
 </JUCER_COMPONENT>

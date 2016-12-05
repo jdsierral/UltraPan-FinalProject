@@ -37,15 +37,6 @@ OscTab::OscTab (UltraPanAudioProcessor& p)
     connectButton->setButtonText (TRANS("connect"));
     connectButton->addListener (this);
 
-    addAndMakeVisible (portTextEditor = new TextEditor ("Port Text Editor"));
-    portTextEditor->setMultiLine (false);
-    portTextEditor->setReturnKeyStartsNewLine (false);
-    portTextEditor->setReadOnly (false);
-    portTextEditor->setScrollbarsShown (true);
-    portTextEditor->setCaretVisible (true);
-    portTextEditor->setPopupMenuEnabled (true);
-    portTextEditor->setText (String());
-
     addAndMakeVisible (gameTrakToggle = new ToggleButton ("Game Trak Toggle"));
     gameTrakToggle->setButtonText (TRANS("GameTrak"));
     gameTrakToggle->addListener (this);
@@ -58,15 +49,31 @@ OscTab::OscTab (UltraPanAudioProcessor& p)
     customToggle->setButtonText (TRANS("Custom"));
     customToggle->addListener (this);
 
+    addAndMakeVisible (portBox = new ComboBox ("PortBox"));
+    portBox->setEditableText (true);
+    portBox->setJustificationType (Justification::centredLeft);
+    portBox->setTextWhenNothingSelected (TRANS("6448"));
+    portBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    portBox->addItem (TRANS("6448"), 1);
+    portBox->addItem (TRANS("7000"), 2);
+    portBox->addListener (this);
+
+    addAndMakeVisible (calButton = new TextButton ("Calibration Button"));
+    calButton->setButtonText (TRANS("Calibrate!"));
+    calButton->addListener (this);
+
 
     //[UserPreSize]
-	
-	if (!(status = connect(6448)))
-		showConnectionErrorMessage ("Error: could not connect to UDP port 9001.");
-	
+
+	if ((status = connect(udpPort))) {
+		connectButton->setButtonText("Disconnect");
+	} else {
+		showConnectionErrorMessage ("Error: could not connect to UDP port 6448.");
+	}
+
 	// tell the component to listen for OSC messages matching this address:
 	addListener (this, "/wek/inputs");
-	//[/UserPreSize]
+    //[/UserPreSize]
 
     setSize (600, 120);
 
@@ -81,10 +88,11 @@ OscTab::~OscTab()
     //[/Destructor_pre]
 
     connectButton = nullptr;
-    portTextEditor = nullptr;
     gameTrakToggle = nullptr;
     leapToggle = nullptr;
     customToggle = nullptr;
+    portBox = nullptr;
+    calButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -116,10 +124,11 @@ void OscTab::resized()
     //[/UserPreResize]
 
     connectButton->setBounds (24, 72, 150, 24);
-    portTextEditor->setBounds (24, 24, 150, 24);
     gameTrakToggle->setBounds (200, 24, 150, 24);
     leapToggle->setBounds (200, 48, 150, 24);
     customToggle->setBounds (200, 72, 150, 24);
+    portBox->setBounds (24, 24, 150, 24);
+    calButton->setBounds (392, 48, 128, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -132,6 +141,16 @@ void OscTab::buttonClicked (Button* buttonThatWasClicked)
     if (buttonThatWasClicked == connectButton)
     {
         //[UserButtonCode_connectButton] -- add your button handler code here..
+		if (!status) {
+			if ((status = connect(6448))){
+				connectButton->setButtonText("Disconnect");
+			} else {
+				showConnectionErrorMessage ("Error: could not connect to UDP port 6448.");
+			}
+		} else {
+			status = !disconnect();
+			connectButton->setButtonText("Connect");
+		}
         //[/UserButtonCode_connectButton]
     }
     else if (buttonThatWasClicked == gameTrakToggle)
@@ -149,21 +168,69 @@ void OscTab::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_customToggle] -- add your button handler code here..
         //[/UserButtonCode_customToggle]
     }
+    else if (buttonThatWasClicked == calButton)
+    {
+        //[UserButtonCode_calButton] -- add your button handler code here..
+		deltaL = posL;
+		deltaR = posR;
+		repaint();
+        //[/UserButtonCode_calButton]
+    }
 
     //[UserbuttonClicked_Post]
     //[/UserbuttonClicked_Post]
+}
+
+void OscTab::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+{
+    //[UsercomboBoxChanged_Pre]
+    //[/UsercomboBoxChanged_Pre]
+
+    if (comboBoxThatHasChanged == portBox)
+    {
+        //[UserComboBoxCode_portBox] -- add your combo box handling code here..
+		udpPort = portBox->getText().getIntValue();
+        //[/UserComboBoxCode_portBox]
+    }
+
+    //[UsercomboBoxChanged_Post]
+    //[/UsercomboBoxChanged_Post]
+}
+
+void OscTab::visibilityChanged()
+{
+    //[UserCode_visibilityChanged] -- Add your code here...
+    //[/UserCode_visibilityChanged]
 }
 
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
+void OscTab::update() {
+
+}
+
 void OscTab::oscMessageReceived (const OSCMessage& message) {
 	if (message.size() == 7 && message[0].isFloat32()){
 		if (message[6].getInt32()) {
-			*processor.xPos = message[0].getFloat32() * 10;
-			*processor.yPos = message[1].getFloat32() * 10;
-			*processor.zPos = message[2].getFloat32() * 10;
+
+			azimuL = message[0].getFloat32() * 45;
+			elevaL = message[1].getFloat32() * 45;
+			depthL = (message[2].getFloat32()) * 30;
+			Conv::sph2car(azimuL, elevaL, depthL, false, posL.x, posL.y, posL.z);
+			*processor.pos1X = jlimit<float>(-10.f, 10.f, posL.x - deltaL.x);
+			*processor.pos1Y = -jlimit<float>(-10.f, 10.f, 2 * (posL.y - deltaL.y));
+			*processor.pos1Z = jlimit<float>(-10.f, 10.f, posL.z - deltaL.z);
+
+
+			azimuR = message[3].getFloat32() * 45;
+			elevaR = message[4].getFloat32() * 45;
+			depthR = (message[5].getFloat32()) * 30;
+			Conv::sph2car(azimuR, elevaR, depthR, false, posR.x, posR.y, posR.z);
+			*processor.pos2X = jlimit<float>(-10.f, 10.f, posR.x - deltaR.x);
+			*processor.pos2Y = -jlimit<float>(-10.f, 10.f, 2 * (posR.y - deltaR.y));
+			*processor.pos2Z = jlimit<float>(-10.f, 10.f, posR.z - deltaR.z);
 		}
 	}
 }
@@ -173,6 +240,10 @@ void OscTab::showConnectionErrorMessage (const String& messageText) {
 									  "Connection error",
 									  messageText,
 									  "OK");
+}
+
+void OscTab::updateNumChannels(int ins, int outs) {
+
 }
 
 //[/MiscUserCode]
@@ -192,6 +263,9 @@ BEGIN_JUCER_METADATA
                  constructorParams="UltraPanAudioProcessor&amp; p" variableInitialisers="processor(p)&#10;"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="600" initialHeight="120">
+  <METHODS>
+    <METHOD name="visibilityChanged()"/>
+  </METHODS>
   <BACKGROUND backgroundColour="ffffffff">
     <RECT pos="-9 -3 617 131" fill="linear: 304 120, 304 0, 0=ff71c100, 1=ff4b8100"
           hasStroke="0"/>
@@ -199,10 +273,6 @@ BEGIN_JUCER_METADATA
   <TEXTBUTTON name="Connect Button" id="60989ea07129e409" memberName="connectButton"
               virtualName="" explicitFocusOrder="0" pos="24 72 150 24" buttonText="connect"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
-  <TEXTEDITOR name="Port Text Editor" id="fd7879f5c8195a6" memberName="portTextEditor"
-              virtualName="" explicitFocusOrder="0" pos="24 24 150 24" initialText=""
-              multiline="0" retKeyStartsLine="0" readonly="0" scrollbars="1"
-              caret="1" popupmenu="1"/>
   <TOGGLEBUTTON name="Game Trak Toggle" id="bfe23abfc4f7aba8" memberName="gameTrakToggle"
                 virtualName="" explicitFocusOrder="0" pos="200 24 150 24" buttonText="GameTrak"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
@@ -212,6 +282,12 @@ BEGIN_JUCER_METADATA
   <TOGGLEBUTTON name="Custom Toggle" id="27d5a5c7d880eafc" memberName="customToggle"
                 virtualName="" explicitFocusOrder="0" pos="200 72 150 24" buttonText="Custom"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+  <COMBOBOX name="PortBox" id="ff405dc967a0db0e" memberName="portBox" virtualName=""
+            explicitFocusOrder="0" pos="24 24 150 24" editable="1" layout="33"
+            items="6448&#10;7000" textWhenNonSelected="6448" textWhenNoItems="(no choices)"/>
+  <TEXTBUTTON name="Calibration Button" id="cf9ed1489412dca2" memberName="calButton"
+              virtualName="" explicitFocusOrder="0" pos="392 48 128 24" buttonText="Calibrate!"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

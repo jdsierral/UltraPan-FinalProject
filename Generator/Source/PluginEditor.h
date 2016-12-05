@@ -17,17 +17,12 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_766762D71FE39ED6__
-#define __JUCE_HEADER_766762D71FE39ED6__
+#ifndef __JUCE_HEADER_44FEB00038C3CF12__
+#define __JUCE_HEADER_44FEB00038C3CF12__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
-#include "SetupTab.h"
-#include "MainTab.h"
-#include "OscTab.h"
-#include "UltraPanLookAndFeel.h"
-#include "SpecialDrawing.h"
 //[/Headers]
 
 
@@ -40,60 +35,47 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class UltraPanAudioProcessorEditor  : public AudioProcessorEditor,
-                                      public Timer,
-                                      public ButtonListener
+class GeneratorAudioProcessorEditor  : public AudioProcessorEditor,
+                                       public Timer,
+                                       public SliderListener,
+                                       public ComboBoxListener,
+                                       public ButtonListener
 {
 public:
     //==============================================================================
-    UltraPanAudioProcessorEditor (UltraPanAudioProcessor& p);
-    ~UltraPanAudioProcessorEditor();
+    GeneratorAudioProcessorEditor (GeneratorAudioProcessor& p);
+    ~GeneratorAudioProcessorEditor();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-	void timerCallback() override;
-	void update();
-	void updateNumChannels(int ins, int outs);
+    void timerCallback() override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    UltraPanAudioProcessor& processor;
-
-	const int ins;
-	const int outs;
-
-	UltraPanLookAndFeel myLookAndFeel;
-	std::vector<SpDraw> sourceDraw;
-	std::vector<SpDraw> speakerDraw;
-	std::vector<Vector3D<float>> sourcePos;
-	std::vector<Vector3D<float>> speakerPos;
-
-	float sliderRange = 10;
-	float baseHor = 300, baseVer = 150;
-
-	MainTab*	mainTab;
-	SetupTab*	setupTab;
-	OscTab*		oscTab;
-
+    GeneratorAudioProcessor& processor;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<TabbedComponent> tabs;
-    ScopedPointer<ToggleButton> bypassButton;
+    ScopedPointer<Slider> gainSlider;
+    ScopedPointer<ComboBox> typeBox;
+    ScopedPointer<Slider> freqSlider;
+    ScopedPointer<ToggleButton> toggleButton;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UltraPanAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GeneratorAudioProcessorEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_766762D71FE39ED6__
+#endif   // __JUCE_HEADER_44FEB00038C3CF12__

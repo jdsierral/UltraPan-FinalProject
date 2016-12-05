@@ -36,7 +36,9 @@
                                                                     //[/Comments]
 */
 class MainTab  : public Component,
-                 public SliderListener
+                 public SliderListener,
+                 public ButtonListener,
+                 public ComboBoxListener
 {
 public:
     //==============================================================================
@@ -45,22 +47,39 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+	void update();
+	void updateNumChannels(int ins, int outs);
+
+
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	UltraPanAudioProcessor& processor;
+
+	Vector3D<float> l;
+	Vector3D<float> r;
     //[/UserVariables]
 
     //==============================================================================
     ScopedPointer<Slider> mainVolSlider;
     ScopedPointer<Slider> baseSlider;
+    ScopedPointer<Slider> pos1XSlider;
+    ScopedPointer<Slider> pos1YSlider;
+    ScopedPointer<Slider> pos1ZSlider;
+    ScopedPointer<Slider> pos2XSlider;
+    ScopedPointer<Slider> pos2YSlider;
+    ScopedPointer<Slider> pos2ZSlider;
+    ScopedPointer<ToggleButton> toggleButton;
+    ScopedPointer<ComboBox> inputSelectBox;
 
 
     //==============================================================================
