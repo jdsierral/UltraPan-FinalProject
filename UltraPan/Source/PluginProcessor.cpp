@@ -95,6 +95,7 @@ UltraPanAudioProcessor::UltraPanAudioProcessor()
 	
 	addParameter(bypass);
 	addParameter(mainVol);
+	addParameter(base);
 	
 	addParameter(pos1X);
 	addParameter(pos1Y);
@@ -103,6 +104,9 @@ UltraPanAudioProcessor::UltraPanAudioProcessor()
 	addParameter(pos2X);
 	addParameter(pos2Y);
 	addParameter(pos2Z);
+	
+	*mainVol = 0;
+	*base = 3;
 }
 
 UltraPanAudioProcessor::~UltraPanAudioProcessor()

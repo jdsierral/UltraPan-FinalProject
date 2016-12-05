@@ -16,26 +16,33 @@
 
 class SpDraw {
 public:
-	SpDraw(){};
+	SpDraw() : radius(15), horScale(1), verScale(1){
+		setMaxAndMinValues(10, -10, 10, -10, 10, -10);
+	};
 	
 	
 	void drawCoordSphere(Graphics& g, float x, float  y, float  z){
-		chanHor = x * (zMax-z)/(zMax-zMin);
-		chanVer = - y * (xMax-z)/(xMax-xMin);
-		chanVerS= (zMax-z) * (zMax-z)/(zMax-zMin);
-		radi = radius * (((zMax-z)/(zMax-zMin)) * 0.9 + 0.1);
+		
+		float depthScale = (zMax-z)/(zMax-zMin) * 0.5 + 0.5;
+		float heightScale = (yMax-y)/(yMax-yMin) * 0.8 + 0.2;
+		chanHor = horScale * x * depthScale;
+		chanVer = - verScale * y * depthScale;
+		chanVerS= (zMax-z) * depthScale;
+		radi = radius * (depthScale * 0.9 + 0.1);
 		
 		
-		g.setColour (baseColor.darker(1));
-		g.fillEllipse (baseHor - radi + 5 * chanHor,
-					   baseVer - radi + 2 * chanVerS + 85,
-					   radi * 2,
-					   radi / 2);
+		g.setColour ((Colours::black).withAlpha(0.5f));
+		g.fillEllipse (baseHor - radi * heightScale +
+					   5 * chanHor,
+					   baseVer - radi * heightScale/4.f +
+					   2 * chanVerS + 85,
+					   radi * heightScale * 2,
+					   radi * heightScale / 2);
 		
 		g.setGradientFill (ColourGradient (baseColor,
 										   baseHor + 5.75 * (chanHor),
 										   baseVer + 5 * (chanVer) - radi,
-										   Colours::black,
+										   baseColor.darker(1.f),
 										   baseHor + 4.25 * (chanHor),
 										   baseVer + 5 * (chanVer) + radi,
 										   true));
@@ -46,10 +53,6 @@ public:
 					   radi * 2);
 	}
 	
-	void drawTest(Graphics& g) {
-		g.setColour(Colours::black);
-		g.fillEllipse(20, 20, 100, 100);
-	}
 	
 	void setMaxAndMinValues(float newXMax,float  newXMin,float  newYMax, float newYMin, float newZMax, float newZMin) {
 		xMax = newXMax;
@@ -73,23 +76,18 @@ public:
 		baseColor = newColour;
 	}
 	
+	void setScale (float newHorScale, float newVerScale) {
+		horScale = newHorScale;
+		verScale = newVerScale;
+	}
+	
 private:
 	float chanHor, chanVer,	chanVerS;
 	float radius;
 	float xMax, xMin, yMax, yMin, zMax, zMin;
 	float radi, baseHor, baseVer;
+	float horScale, verScale;
 	Colour baseColor;
-	
-//    g.setGradientFill (ColourGradient (Colour (0xff0049a5),
-//                                       328.0f, 152.0f,
-//                                       Colours::black,
-//                                       288.0f, 216.0f,
-//                                       true));
-//    g.fillEllipse (263.0f, 123.0f, 100.0f, 100.0f);
-	
-//	Colour (0xffb9a384)
-//	Colour (0xff574326)
-//	Colour (0xb3000000)
 };
 
 

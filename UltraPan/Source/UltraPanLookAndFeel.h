@@ -16,7 +16,7 @@ class UltraPanLookAndFeel		: public LookAndFeel_V3
 public:
 	
 	UltraPanLookAndFeel() {
-		Colour myColor = Colour(0xFF003271);
+		Colour myColor = Colour(0xff00BCD1);
 		
 		setColour(Slider::rotarySliderFillColourId, myColor);
 		setColour(Slider::thumbColourId, myColor.withMultipliedSaturation (0.9f).withMultipliedAlpha (1.0f));

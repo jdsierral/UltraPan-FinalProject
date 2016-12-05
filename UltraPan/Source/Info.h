@@ -17,8 +17,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_6DAE16CD21EDFFAE__
-#define __JUCE_HEADER_6DAE16CD21EDFFAE__
+#ifndef __JUCE_HEADER_64AC422F3B6C7DB0__
+#define __JUCE_HEADER_64AC422F3B6C7DB0__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -34,15 +34,16 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class TestGui  : public Component
+class Info  : public Component
 {
 public:
     //==============================================================================
-    TestGui ();
-    ~TestGui();
+    Info ();
+    ~Info();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+	void mouseDown (const MouseEvent& event) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -55,13 +56,14 @@ private:
     //[/UserVariables]
 
     //==============================================================================
+    ScopedPointer<HyperlinkButton> webLink;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TestGui)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Info)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_6DAE16CD21EDFFAE__
+#endif   // __JUCE_HEADER_64AC422F3B6C7DB0__

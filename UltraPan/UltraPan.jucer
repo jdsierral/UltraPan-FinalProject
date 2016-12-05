@@ -19,6 +19,8 @@
         <FILE id="upH5Ej" name="PluginParams.h" compile="0" resource="0" file="Source/PluginParams.h"/>
       </GROUP>
       <GROUP id="{9A8C792E-2671-33B6-16FF-E9EB4628467D}" name="GUI">
+        <FILE id="RZ0QOa" name="Info.cpp" compile="1" resource="0" file="Source/Info.cpp"/>
+        <FILE id="DuOqbs" name="Info.h" compile="0" resource="0" file="Source/Info.h"/>
         <FILE id="H5gcVU" name="SpecialDrawing.h" compile="0" resource="0"
               file="Source/SpecialDrawing.h"/>
         <FILE id="Ee8Y9H" name="Conversion.h" compile="0" resource="0" file="Source/Conversion.h"/>

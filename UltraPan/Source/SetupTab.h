@@ -38,7 +38,8 @@
 */
 class SetupTab  : public Component,
                   public ComboBoxListener,
-                  public SliderListener
+                  public SliderListener,
+                  public LabelListener
 {
 public:
     //==============================================================================
@@ -49,25 +50,31 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
 	void update();
 	void updateNumChannels(int ins, int outs);
+	void mouseEnter(const MouseEvent& e) override;
+	void mouseExit(const MouseEvent& e) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void labelTextChanged (Label* labelThatHasChanged) override;
 
+    // Binary resources:
+    static const char* setupTab_png;
+    static const int setupTab_pngSize;
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	UltraPanAudioProcessor& processor;
-	
+
 	SpDraw speaker;
 
 	Vector3D<float> speakerPos;
 	float sliderRange = 10;
 	float radi, chanHor, chanVer, chanVerS;
-	float baseHor = 450, baseVer = 20;
+	float baseHor = 100, baseVer = 230;
     //[/UserVariables]
 
     //==============================================================================
@@ -75,6 +82,10 @@ private:
     ScopedPointer<Slider> speakerPosXSlider;
     ScopedPointer<Slider> speakerPosYSlider;
     ScopedPointer<Slider> speakerPosZSlider;
+    ScopedPointer<Label> speakerPosXLabel;
+    ScopedPointer<Label> speakerPosYLabel;
+    ScopedPointer<Label> speakerPosZLabel;
+    Image cachedImage_setupTab_png_1;
 
 
     //==============================================================================

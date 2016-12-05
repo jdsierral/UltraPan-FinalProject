@@ -39,15 +39,22 @@ OscTab::OscTab (UltraPanAudioProcessor& p)
 
     addAndMakeVisible (gameTrakToggle = new ToggleButton ("Game Trak Toggle"));
     gameTrakToggle->setButtonText (TRANS("GameTrak"));
+    gameTrakToggle->setRadioGroupId (1);
     gameTrakToggle->addListener (this);
+    gameTrakToggle->setToggleState (true, dontSendNotification);
+    gameTrakToggle->setColour (ToggleButton::textColourId, Colour (0xfff4efe7));
 
     addAndMakeVisible (leapToggle = new ToggleButton ("new toggle button"));
     leapToggle->setButtonText (TRANS("leapToggle"));
+    leapToggle->setRadioGroupId (1);
     leapToggle->addListener (this);
+    leapToggle->setColour (ToggleButton::textColourId, Colour (0xfff4efe7));
 
     addAndMakeVisible (customToggle = new ToggleButton ("Custom Toggle"));
     customToggle->setButtonText (TRANS("Custom"));
+    customToggle->setRadioGroupId (1);
     customToggle->addListener (this);
+    customToggle->setColour (ToggleButton::textColourId, Colour (0xfff4efe7));
 
     addAndMakeVisible (portBox = new ComboBox ("PortBox"));
     portBox->setEditableText (true);
@@ -75,7 +82,7 @@ OscTab::OscTab (UltraPanAudioProcessor& p)
 	addListener (this, "/wek/inputs");
     //[/UserPreSize]
 
-    setSize (600, 120);
+    setSize (200, 300);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -105,14 +112,13 @@ void OscTab::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::white);
+    g.fillAll (Colour (0xff303030));
 
-    g.setGradientFill (ColourGradient (Colour (0xff71c100),
-                                       304.0f, 120.0f,
-                                       Colour (0xff4b8100),
-                                       304.0f, 0.0f,
-                                       false));
-    g.fillRect (-9, -3, 617, 131);
+    g.setColour (Colour (0xfff4efe7));
+    g.setFont (Font ("Futura-Light", 15.00f, Font::plain));
+    g.drawText (TRANS("UDP PORT"),
+                35, 17, 76, 30,
+                Justification::centredLeft, true);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -123,12 +129,12 @@ void OscTab::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    connectButton->setBounds (24, 72, 150, 24);
-    gameTrakToggle->setBounds (200, 24, 150, 24);
-    leapToggle->setBounds (200, 48, 150, 24);
-    customToggle->setBounds (200, 72, 150, 24);
-    portBox->setBounds (24, 24, 150, 24);
-    calButton->setBounds (392, 48, 128, 24);
+    connectButton->setBounds (51, 85, 99, 24);
+    gameTrakToggle->setBounds (29, 134, 150, 24);
+    leapToggle->setBounds (29, 158, 150, 24);
+    customToggle->setBounds (29, 182, 150, 24);
+    portBox->setBounds (26, 45, 150, 24);
+    calButton->setBounds (24, 237, 153, 30);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -189,7 +195,6 @@ void OscTab::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     if (comboBoxThatHasChanged == portBox)
     {
         //[UserComboBoxCode_portBox] -- add your combo box handling code here..
-		udpPort = portBox->getText().getIntValue();
         //[/UserComboBoxCode_portBox]
     }
 
@@ -261,32 +266,35 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="OscTab" componentName=""
                  parentClasses="public Component, private OSCReceiver, private OSCReceiver::ListenerWithOSCAddress&lt;OSCReceiver::MessageLoopCallback&gt;"
                  constructorParams="UltraPanAudioProcessor&amp; p" variableInitialisers="processor(p)&#10;"
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="600" initialHeight="120">
+                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330"
+                 fixedSize="1" initialWidth="200" initialHeight="300">
   <METHODS>
     <METHOD name="visibilityChanged()"/>
   </METHODS>
-  <BACKGROUND backgroundColour="ffffffff">
-    <RECT pos="-9 -3 617 131" fill="linear: 304 120, 304 0, 0=ff71c100, 1=ff4b8100"
-          hasStroke="0"/>
+  <BACKGROUND backgroundColour="ff303030">
+    <TEXT pos="35 17 76 30" fill="solid: fff4efe7" hasStroke="0" text="UDP PORT"
+          fontname="Futura-Light" fontsize="15" bold="0" italic="0" justification="33"/>
   </BACKGROUND>
   <TEXTBUTTON name="Connect Button" id="60989ea07129e409" memberName="connectButton"
-              virtualName="" explicitFocusOrder="0" pos="24 72 150 24" buttonText="connect"
+              virtualName="" explicitFocusOrder="0" pos="51 85 99 24" buttonText="connect"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TOGGLEBUTTON name="Game Trak Toggle" id="bfe23abfc4f7aba8" memberName="gameTrakToggle"
-                virtualName="" explicitFocusOrder="0" pos="200 24 150 24" buttonText="GameTrak"
-                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+                virtualName="" explicitFocusOrder="0" pos="29 134 150 24" txtcol="fff4efe7"
+                buttonText="GameTrak" connectedEdges="0" needsCallback="1" radioGroupId="1"
+                state="1"/>
   <TOGGLEBUTTON name="new toggle button" id="9d12b9422a587b7b" memberName="leapToggle"
-                virtualName="" explicitFocusOrder="0" pos="200 48 150 24" buttonText="leapToggle"
-                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+                virtualName="" explicitFocusOrder="0" pos="29 158 150 24" txtcol="fff4efe7"
+                buttonText="leapToggle" connectedEdges="0" needsCallback="1"
+                radioGroupId="1" state="0"/>
   <TOGGLEBUTTON name="Custom Toggle" id="27d5a5c7d880eafc" memberName="customToggle"
-                virtualName="" explicitFocusOrder="0" pos="200 72 150 24" buttonText="Custom"
-                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+                virtualName="" explicitFocusOrder="0" pos="29 182 150 24" txtcol="fff4efe7"
+                buttonText="Custom" connectedEdges="0" needsCallback="1" radioGroupId="1"
+                state="0"/>
   <COMBOBOX name="PortBox" id="ff405dc967a0db0e" memberName="portBox" virtualName=""
-            explicitFocusOrder="0" pos="24 24 150 24" editable="1" layout="33"
+            explicitFocusOrder="0" pos="26 45 150 24" editable="1" layout="33"
             items="6448&#10;7000" textWhenNonSelected="6448" textWhenNoItems="(no choices)"/>
   <TEXTBUTTON name="Calibration Button" id="cf9ed1489412dca2" memberName="calButton"
-              virtualName="" explicitFocusOrder="0" pos="392 48 128 24" buttonText="Calibrate!"
+              virtualName="" explicitFocusOrder="0" pos="24 237 153 30" buttonText="Calibrate!"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
 </JUCER_COMPONENT>
 

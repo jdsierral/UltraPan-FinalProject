@@ -37,8 +37,7 @@
 */
 class MainTab  : public Component,
                  public SliderListener,
-                 public ButtonListener,
-                 public ComboBoxListener
+                 public LabelListener
 {
 public:
     //==============================================================================
@@ -49,6 +48,9 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
 	void update();
 	void updateNumChannels(int ins, int outs);
+	
+	void mouseEnter(const MouseEvent& event) override;
+	void mouseExit(const MouseEvent& event) override;
 
 
     //[/UserMethods]
@@ -56,8 +58,7 @@ public:
     void paint (Graphics& g) override;
     void resized() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
-    void buttonClicked (Button* buttonThatWasClicked) override;
-    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+    void labelTextChanged (Label* labelThatHasChanged) override;
 
 
 
@@ -78,8 +79,14 @@ private:
     ScopedPointer<Slider> pos2XSlider;
     ScopedPointer<Slider> pos2YSlider;
     ScopedPointer<Slider> pos2ZSlider;
-    ScopedPointer<ToggleButton> toggleButton;
-    ScopedPointer<ComboBox> inputSelectBox;
+    ScopedPointer<Label> mainVolLabel;
+    ScopedPointer<Label> baseLabel;
+    ScopedPointer<Label> pos1XLabel;
+    ScopedPointer<Label> pos1YLabel;
+    ScopedPointer<Label> pos1ZLabel;
+    ScopedPointer<Label> pos2XLabel;
+    ScopedPointer<Label> pos2YLabel;
+    ScopedPointer<Label> pos2ZLabel;
 
 
     //==============================================================================

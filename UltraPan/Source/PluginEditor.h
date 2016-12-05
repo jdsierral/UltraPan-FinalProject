@@ -28,6 +28,7 @@
 #include "OscTab.h"
 #include "UltraPanLookAndFeel.h"
 #include "SpecialDrawing.h"
+#include "Info.h"
 //[/Headers]
 
 
@@ -60,6 +61,11 @@ public:
     void resized() override;
     void buttonClicked (Button* buttonThatWasClicked) override;
 
+    // Binary resources:
+    static const char* background3_png;
+    static const int background3_pngSize;
+    static const char* logoTypeblue_png;
+    static const int logoTypeblue_pngSize;
 
 
 private:
@@ -76,7 +82,6 @@ private:
 	std::vector<Vector3D<float>> speakerPos;
 
 	float sliderRange = 10;
-	float baseHor = 300, baseVer = 150;
 
 	MainTab*	mainTab;
 	SetupTab*	setupTab;
@@ -87,6 +92,9 @@ private:
     //==============================================================================
     ScopedPointer<TabbedComponent> tabs;
     ScopedPointer<ToggleButton> bypassButton;
+    ScopedPointer<ImageButton> imageButton;
+    ScopedPointer<Info> infoOverlay;
+    Image cachedImage_background3_png_1;
 
 
     //==============================================================================
