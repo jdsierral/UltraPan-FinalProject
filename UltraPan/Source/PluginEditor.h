@@ -60,6 +60,9 @@ public:
     void paint (Graphics& g) override;
     void resized() override;
     void buttonClicked (Button* buttonThatWasClicked) override;
+    void visibilityChanged() override;
+    void focusGained (FocusChangeType cause) override;
+    void focusLost (FocusChangeType cause) override;
 
     // Binary resources:
     static const char* background3_png;

@@ -250,6 +250,7 @@ void UltraPanAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 		speakerSet[in]->init(sampleRate);
 		speakerSet[in]->setBufferSize(samplesPerBlock);
 	}
+	setBase(*base);
 }
 
 void UltraPanAudioProcessor::releaseResources()
@@ -285,30 +286,35 @@ void UltraPanAudioProcessor::setSpeakerPos(int sp, Vector3D<float> newPos){
 	for (int in = 0; in < getTotalNumInputChannels(); in++) {
 		speakerSet[in]->setSpeakerPos(sp, newPos);
 	}
+	setGuiFlag();
 }
 
 void UltraPanAudioProcessor::setSpeakerPosX(int sp, float newPosX){
 	for (int in = 0; in < getTotalNumInputChannels(); in++) {
 		speakerSet[in]->setSpeakerPosX(sp, newPosX);
 	}
+	setGuiFlag();
 }
 
 void UltraPanAudioProcessor::setSpeakerPosY(int sp, float newPosY){
 	for (int in = 0; in < getTotalNumInputChannels(); in++) {
 		speakerSet[in]->setSpeakerPosY(sp, newPosY);
 	}
+	setGuiFlag();
 }
 
 void UltraPanAudioProcessor::setSpeakerPosZ(int sp, float newPosZ){
 	for (int in = 0; in < getTotalNumInputChannels(); in++) {
 		speakerSet[in]->setSpeakerPosZ(sp, newPosZ);
 	}
+	setGuiFlag();
 }
 
 void UltraPanAudioProcessor::setBase(float newBase){
 	for (int in = 0; in < getTotalNumInputChannels(); in++) {
 		speakerSet[in]->setBase(1 + newBase/1000.f);
 	}
+	setGuiFlag();
 }
 
 //==============================================================================
@@ -372,9 +378,9 @@ void UltraPanAudioProcessor::getStateInformation (MemoryBlock& destData)
 	
 	config.setAttribute("NumIns",  ins);
 	config.setAttribute("NumOuts", outs);
-
-   config.setAttribute(mainVol->paramID, *mainVol);
-   config.setAttribute(base->paramID, *base);
+	
+	config.setAttribute(mainVol->paramID, *mainVol);
+	config.setAttribute(base->paramID, *base);
 	
 	//===================================
 	config.setAttribute(pos1X->paramID, *pos1X);
@@ -409,12 +415,12 @@ void UltraPanAudioProcessor::setStateInformation (const void* data, int sizeInBy
 			
 			const int ins = xml->getDoubleAttribute("NumIns");
 			const int outs= xml->getDoubleAttribute("NumOuts");
-
-        *mainVol =  xml->getDoubleAttribute(mainVol->paramID);
-        *base = xml->getDoubleAttribute(base->paramID);
-				*pos1X = xml->getDoubleAttribute(pos1X->paramID);
-				*pos1Y = xml->getDoubleAttribute(pos1Y->paramID);
-				*pos1Z = xml->getDoubleAttribute(pos1Z->paramID);
+			
+			*mainVol =  xml->getDoubleAttribute(mainVol->paramID);
+			*base = xml->getDoubleAttribute(base->paramID);
+			*pos1X = xml->getDoubleAttribute(pos1X->paramID);
+			*pos1Y = xml->getDoubleAttribute(pos1Y->paramID);
+			*pos1Z = xml->getDoubleAttribute(pos1Z->paramID);
 			
 			if (ins > 1) {
 				*pos2X = xml->getDoubleAttribute(pos2X->paramID);
@@ -434,7 +440,7 @@ void UltraPanAudioProcessor::setStateInformation (const void* data, int sizeInBy
 			}
 		}
 	}
-}	
+}
 
 //==============================================================================
 // This creates new instances of the plugin..

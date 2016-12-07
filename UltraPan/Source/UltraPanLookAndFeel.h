@@ -20,6 +20,10 @@ public:
 		
 		setColour(Slider::rotarySliderFillColourId, myColor);
 		setColour(Slider::thumbColourId, myColor.withMultipliedSaturation (0.9f).withMultipliedAlpha (1.0f));
+		setColour(Slider::textBoxTextColourId, Colours::white);
+		setColour(Label::textWhenEditingColourId, Colours::black);
+		setColour(Label::outlineWhenEditingColourId, Colour(0x00000000));
+		setColour(Label::backgroundWhenEditingColourId, Colour(0x303030));
 	}
 	
 	void drawRoundThumb (Graphics& g, const float x, const float y,

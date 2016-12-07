@@ -116,7 +116,7 @@ SetupTab::SetupTab (UltraPanAudioProcessor& p)
 		speaker.setRadius(15);
 		speaker.setColour(Colour (0xff00BCD1));
 	}
-	
+
 	speakerPosXSlider->addMouseListener(this, false);
 	speakerPosYSlider->addMouseListener(this, false);
 	speakerPosZSlider->addMouseListener(this, false);
@@ -316,11 +316,11 @@ void SetupTab::mouseEnter(const MouseEvent& e) {
 	if (e.eventComponent == speakerPosZSlider) {
 		speakerPosZLabel->setText(String(speakerPosZSlider->getValue(), 1), dontSendNotification);
 	}
-	
+
 }
 
 void SetupTab::mouseExit(const MouseEvent& e) {
-	
+
 	if (e.eventComponent == speakerPosXSlider) {
 		speakerPosXLabel->setText("x", dontSendNotification);
 	}

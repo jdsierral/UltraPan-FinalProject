@@ -72,6 +72,7 @@ UltraPanAudioProcessorEditor::UltraPanAudioProcessorEditor (UltraPanAudioProcess
 
 	setLookAndFeel(&myLookAndFeel);
 
+
 	mainTab = static_cast<MainTab*>(tabs->getTabContentComponent(0));
 	setupTab = static_cast<SetupTab*>(tabs->getTabContentComponent(1));
 	oscTab = static_cast<OscTab*>(tabs->getTabContentComponent(2));
@@ -226,16 +227,41 @@ void UltraPanAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
+void UltraPanAudioProcessorEditor::visibilityChanged()
+{
+    //[UserCode_visibilityChanged] -- Add your code here...
+	DBG("Visibility Changed");
+    //[/UserCode_visibilityChanged]
+}
+
+void UltraPanAudioProcessorEditor::focusGained (FocusChangeType cause)
+{
+    //[UserCode_focusGained] -- Add your code here...
+	DBG("Focus Changed");
+    //[/UserCode_focusGained]
+}
+
+void UltraPanAudioProcessorEditor::focusLost (FocusChangeType cause)
+{
+    //[UserCode_focusLost] -- Add your code here...
+	DBG("Focus Lost");
+    //[/UserCode_focusLost]
+}
+
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void UltraPanAudioProcessorEditor::timerCallback() {
 	if (processor.getGuiFlag()) {
-		mainTab->update();
-		setupTab->update();
-		oscTab->update();
+		if (mainTab == tabs->getCurrentContentComponent())
+			mainTab->update();
+		if (setupTab == tabs->getCurrentContentComponent())
+			setupTab->update();
+		if (oscTab == tabs->getCurrentContentComponent())
+			oscTab->update();
 		update();
 		repaint();
+		processor.clearGuiFlag();
 	}
 }
 
@@ -306,6 +332,11 @@ BEGIN_JUCER_METADATA
                  constructorParams="UltraPanAudioProcessor&amp; p" variableInitialisers="AudioProcessorEditor(&amp;p), processor(p), ins(processor.getTotalNumInputChannels()), outs(processor.getTotalNumOutputChannels())"
                  snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="600" initialHeight="400">
+  <METHODS>
+    <METHOD name="visibilityChanged()"/>
+    <METHOD name="focusLost (FocusChangeType cause)"/>
+    <METHOD name="focusGained (FocusChangeType cause)"/>
+  </METHODS>
   <BACKGROUND backgroundColour="ff232323">
     <IMAGE pos="0 0 600 400" resource="background3_png" opacity="1" mode="2"/>
     <TEXT pos="-16 9 283 81" fill="solid: ff232323" hasStroke="0" text="UltraPan"

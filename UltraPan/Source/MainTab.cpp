@@ -40,7 +40,7 @@ MainTab::MainTab (UltraPanAudioProcessor& p)
     mainVolSlider->addListener (this);
 
     addAndMakeVisible (baseSlider = new Slider ("Base Slider"));
-    baseSlider->setRange (1, 1000, 0);
+    baseSlider->setRange (1, 10, 0);
     baseSlider->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
     baseSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     baseSlider->addListener (this);
@@ -172,14 +172,14 @@ MainTab::MainTab (UltraPanAudioProcessor& p)
 	pos1XSlider->addMouseListener(this, false);
 	pos1YSlider->addMouseListener(this, false);
 	pos1ZSlider->addMouseListener(this, false);
-	
+
 	pos2XSlider->addMouseListener(this, false);
 	pos2YSlider->addMouseListener(this, false);
 	pos2ZSlider->addMouseListener(this, false);
-	
+
 	mainVolSlider->addMouseListener(this, false);
 	baseSlider->addMouseListener(this, false);
-	
+
 	mainVolLabel->setText("Main Vol", dontSendNotification);
 	baseLabel->setText("Base", dontSendNotification);
 	pos1XLabel->setText("Left x", dontSendNotification);
@@ -188,7 +188,9 @@ MainTab::MainTab (UltraPanAudioProcessor& p)
 	pos2XLabel->setText("Right x", dontSendNotification);
 	pos2YLabel->setText("Right y", dontSendNotification);
 	pos2ZLabel->setText("Right z", dontSendNotification);
-	
+
+	update();
+
     //[/Constructor]
 }
 
@@ -395,6 +397,9 @@ void MainTab::update() {
 	pos2XSlider->setValue(r.x, dontSendNotification);
 	pos2YSlider->setValue(r.y, dontSendNotification);
 	pos2ZSlider->setValue(r.z, dontSendNotification);
+
+	mainVolSlider->setValue(*processor.mainVol, dontSendNotification);
+	baseSlider->setValue(*processor.base, dontSendNotification);
 }
 
 void MainTab::updateNumChannels(int ins, int outs) {
@@ -403,7 +408,7 @@ void MainTab::updateNumChannels(int ins, int outs) {
 
 void MainTab::mouseEnter(const MouseEvent& e) {
 	if (e.eventComponent == mainVolSlider) {
-		mainVolLabel->setText(String(mainVolSlider->getValue(), 1), dontSendNotification);
+		mainVolLabel->setText(String(mainVolSlider->getValue(), 1) + " dB", dontSendNotification);
 	}
 	if (e.eventComponent == baseSlider) {
 		baseLabel->setText(String(baseSlider->getValue(), 1), dontSendNotification);
@@ -426,7 +431,7 @@ void MainTab::mouseEnter(const MouseEvent& e) {
 	if (e.eventComponent == pos2ZSlider) {
 		pos2ZLabel->setText(String(pos2ZSlider->getValue(), 1), dontSendNotification);
 	}
-	
+
 }
 
 void MainTab::mouseExit(const MouseEvent& e) {
@@ -481,7 +486,7 @@ BEGIN_JUCER_METADATA
           needsCallback="1"/>
   <SLIDER name="Base Slider" id="271c0bce09620c47" memberName="baseSlider"
           virtualName="" explicitFocusOrder="0" pos="120 168 32 24" min="1"
-          max="1000" int="0" style="RotaryHorizontalVerticalDrag" textBoxPos="NoTextBox"
+          max="10" int="0" style="RotaryHorizontalVerticalDrag" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="1"/>
   <SLIDER name="pos1XSlider" id="11759a50dc05a4c4" memberName="pos1XSlider"

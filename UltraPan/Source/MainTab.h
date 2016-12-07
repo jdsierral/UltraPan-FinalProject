@@ -48,7 +48,7 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
 	void update();
 	void updateNumChannels(int ins, int outs);
-	
+
 	void mouseEnter(const MouseEvent& event) override;
 	void mouseExit(const MouseEvent& event) override;
 

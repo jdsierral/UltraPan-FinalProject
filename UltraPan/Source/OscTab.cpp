@@ -92,6 +92,7 @@ OscTab::OscTab (UltraPanAudioProcessor& p)
 OscTab::~OscTab()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+	disconnect();
     //[/Destructor_pre]
 
     connectButton = nullptr;
