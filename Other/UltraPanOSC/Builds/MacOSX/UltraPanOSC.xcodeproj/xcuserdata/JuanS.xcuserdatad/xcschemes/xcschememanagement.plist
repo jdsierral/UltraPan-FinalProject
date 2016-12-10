@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>UltraPanOsc (AU).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>UltraPanOsc (AUv3 AppExtension).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+		<key>UltraPanOsc (AUv3 Standalone).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+		<key>UltraPanOsc (All).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+		<key>UltraPanOsc (Shared Code).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
+		<key>UltraPanOsc (VST).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>UltraPanOsc (VST3).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>272DF4072B9A2B2028AC1CD9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>44FAC2BD4C1DC2794A8C7D74</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>71A4A5B19B477F73FD2E2D0A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>853ADD1D8EE1EAF864404B03</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A669F10FD5234D2203280C9E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D11D7456C0EE9EE283EEC7D2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DBB9EC291C2D5F06DBA2BF95</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

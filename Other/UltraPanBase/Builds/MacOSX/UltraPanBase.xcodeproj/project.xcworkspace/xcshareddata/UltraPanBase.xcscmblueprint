@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "4D49F0872F8C1569FB64465B5A4D885CE522BE70",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0" : 9223372036854775807,
+    "4D49F0872F8C1569FB64465B5A4D885CE522BE70" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "EF5ECF46-2077-47B0-A904-450F37EE3CF1",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0" : "..\/..\/Juce-Grapefruit",
+    "4D49F0872F8C1569FB64465B5A4D885CE522BE70" : "UltraPan-FinalProject\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "UltraPanBase",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "UltraPanBase\/Builds\/MacOSX\/UltraPanBase.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jdsierral\/UltraPan-FinalProject.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4D49F0872F8C1569FB64465B5A4D885CE522BE70"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/julianstorer\/JUCE.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0"
+    }
+  ]
+}

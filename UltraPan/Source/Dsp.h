@@ -1,6 +1,6 @@
 //----------------------------------------------------------
-// author: "JuanSaudio"
 // name: "DSP"
+// author: "JuanSaudio"
 //
 // Code generated with Faust 0.9.92 (http://faust.grame.fr)
 //----------------------------------------------------------
@@ -42,7 +42,7 @@
 #include <map>
 #include <string.h>
 #include <stdlib.h>
-#include "math.h"
+#include <math.h>
 
 /************************************************************************
  ************************************************************************
@@ -661,22 +661,22 @@ class decorator_dsp : public dsp {
 
 class Dsp : public dsp {
   private:
-	int 	IOTA;
-	float 	fVec0[65536];
 	FAUSTFLOAT 	fslider0;
 	float 	fRec0[2];
+	int 	IOTA;
+	float 	fVec0[65536];
 	FAUSTFLOAT 	fslider1;
 	float 	fRec1[2];
 	int fSamplingFreq;
 
   public:
 	virtual void metadata(Meta* m) { 
+		m->declare("name", "DSP");
 		m->declare("author", "JuanSaudio");
 		m->declare("delay.lib/name", "Faust Delay Library");
 		m->declare("delay.lib/version", "0.0");
 		m->declare("signal.lib/name", "Faust Signal Routing Library");
 		m->declare("signal.lib/version", "0.0");
-		m->declare("name", "DSP");
 		m->declare("math.lib/name", "Faust Math Library");
 		m->declare("math.lib/version", "2.0");
 		m->declare("math.lib/author", "GRAME");
@@ -692,13 +692,13 @@ class Dsp : public dsp {
 		fSamplingFreq = samplingFreq;
 	}
 	virtual void instanceResetUserInterface() {
-		fslider0 = 0.01f;
-		fslider1 = 1.0f;
+		fslider0 = 1.0f;
+		fslider1 = 0.01f;
 	}
 	virtual void instanceClear() {
+		for (int i=0; i<2; i++) fRec0[i] = 0;
 		IOTA = 0;
 		for (int i=0; i<65536; i++) fVec0[i] = 0;
-		for (int i=0; i<2; i++) fRec0[i] = 0;
 		for (int i=0; i<2; i++) fRec1[i] = 0;
 	}
 	virtual void init(int samplingFreq) {
@@ -718,8 +718,8 @@ class Dsp : public dsp {
 	}
 	virtual void buildUserInterface(UI* ui_interface) {
 		ui_interface->openHorizontalBox("Sp");
-		ui_interface->addHorizontalSlider("delay", &fslider0, 0.01f, 0.01f, 65536.0f, 0.01f);
-		ui_interface->addHorizontalSlider("gain", &fslider1, 1.0f, 0.0f, 1.0f, 0.01f);
+		ui_interface->addHorizontalSlider("delay", &fslider1, 0.01f, 0.01f, 65536.0f, 0.01f);
+		ui_interface->addHorizontalSlider("gain", &fslider0, 1.0f, 0.0f, 1.0f, 0.01f);
 		ui_interface->closeBox();
 	}
 	virtual void compute (int count, FAUSTFLOAT** input, FAUSTFLOAT** output) {
@@ -728,17 +728,21 @@ class Dsp : public dsp {
 		FAUSTFLOAT* input0 = input[0];
 		FAUSTFLOAT* output0 = output[0];
 		for (int i=0; i<count; i++) {
+			fRec0[0] = (fSlow0 + (0.999f * fRec0[1]));
 			float fTemp0 = (float)input0[i];
 			fVec0[IOTA&65535] = fTemp0;
-			fRec0[0] = (fSlow0 + (0.999f * fRec0[1]));
-			int iTemp1 = int(fRec0[0]);
-			float fTemp2 = floorf(fRec0[0]);
 			fRec1[0] = (fSlow1 + (0.999f * fRec1[1]));
-			output0[i] = (FAUSTFLOAT)(((fVec0[(IOTA-int((iTemp1 & 65535)))&65535] * (fTemp2 + (1 - fRec0[0]))) + ((fRec0[0] - fTemp2) * fVec0[(IOTA-int((int((iTemp1 + 1)) & 65535)))&65535])) * fRec1[0]);
+			float fTemp1 = (fRec1[0] + -1.499995f);
+			int iTemp2 = int(fTemp1);
+			float fTemp3 = floorf(fTemp1);
+			float fTemp4 = (fRec1[0] + (-2 - fTemp3));
+			float fTemp5 = (fRec1[0] + (-3 - fTemp3));
+			float fTemp6 = (fRec1[0] + (-4 - fTemp3));
+			output0[i] = (FAUSTFLOAT)(fRec0[0] * (((((fVec0[(IOTA-int((iTemp2 & 65535)))&65535] * (0 - (0.5f * fTemp4))) * (0 - (0.33333334f * fTemp5))) * (0 - (0.25f * fTemp6))) * (fTemp3 + (1 - fRec1[0]))) + ((fRec1[0] - fTemp3) * ((((fVec0[(IOTA-int((int((iTemp2 + 1)) & 65535)))&65535] * (0 - (0.5f * fTemp5))) * (0 - (0.33333334f * fTemp6))) * (fTemp3 + (2 - fRec1[0]))) + ((fRec1[0] + (-1 - fTemp3)) * (((0.16666667f * ((fTemp4 * fVec0[(IOTA-int((int((iTemp2 + 3)) & 65535)))&65535]) * (fTemp3 + (4 - fRec1[0])))) + (0.5f * ((fVec0[(IOTA-int((int((iTemp2 + 2)) & 65535)))&65535] * (0 - (0.5f * fTemp6))) * (fTemp3 + (3 - fRec1[0]))))) + (0.041666668f * ((fTemp4 * fTemp5) * fVec0[(IOTA-int((int((iTemp2 + 4)) & 65535)))&65535]))))))));
 			// post processing
 			fRec1[1] = fRec1[0];
-			fRec0[1] = fRec0[0];
 			IOTA = IOTA+1;
+			fRec0[1] = fRec0[0];
 		}
 	}
 };
