@@ -16,9 +16,9 @@ The current repo contains various plugins and tools used during the development 
 
 ## Example of Use
 
-In the future an example video or audio will be available here; meanwhile a preview of what it will look like can be found here:
+Here is a video explaining how the plugin works and a demo of a project in which it was used
 
-https://dl.dropboxusercontent.com/u/27717149/Other/UltraPan-Preview.jpg
+https://youtu.be/gvb-zVeTnLo
 
 ## History
 
