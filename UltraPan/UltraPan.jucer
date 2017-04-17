@@ -13,6 +13,13 @@
               companyEmail="jdsierral@JuanSaudio.com">
   <MAINGROUP id="ai8dsv" name="UltraPan">
     <GROUP id="{9699C67A-7F86-7E55-3E1C-EA65848A87FE}" name="Source">
+      <GROUP id="{4335A825-2900-F692-0DEF-61124B04584F}" name="AltDSP">
+        <FILE id="ccHQYo" name="FaustDsp.h" compile="0" resource="0" file="Source/FaustDsp.h"/>
+        <FILE id="OJkf2x" name="Source.cpp" compile="1" resource="0" file="Source/Source.cpp"/>
+        <FILE id="a9htCt" name="Source.h" compile="0" resource="0" file="Source/Source.h"/>
+        <FILE id="TnDYoF" name="Speaker.cpp" compile="1" resource="0" file="Source/Speaker.cpp"/>
+        <FILE id="hapFNH" name="Speaker.h" compile="0" resource="0" file="Source/Speaker.h"/>
+      </GROUP>
       <GROUP id="{EF75FC96-3CB1-69B0-7660-C7A69EC86F04}" name="Tools">
         <FILE id="cnyyZU" name="PluginParams.cpp" compile="1" resource="0"
               file="Source/PluginParams.cpp"/>

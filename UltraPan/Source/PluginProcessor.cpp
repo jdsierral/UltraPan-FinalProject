@@ -106,7 +106,7 @@ UltraPanAudioProcessor::UltraPanAudioProcessor()
 	addParameter(pos2Z);
 	
 	*mainVol = 0;
-	*base = 3;
+	*base = 3; //??
 }
 
 UltraPanAudioProcessor::~UltraPanAudioProcessor()
@@ -243,6 +243,7 @@ void UltraPanAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 		speakerSet.removeLast();
 	
 	tempIn.resize(numIns);
+	dlyBuffer.setSize(numIns, 2 * samplesPerBlock);
 	
 	for (int in = 0; in < numIns; in++) {
 		tempIn[in].setSize(1, samplesPerBlock);
@@ -259,23 +260,46 @@ void UltraPanAudioProcessor::releaseResources()
 
 void UltraPanAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
-	const int numIns  = getTotalNumInputChannels();
-//	const int numOuts = getTotalNumOutputChannels();
-	const int bufSize = buffer.getNumSamples();
-	
-//	float** dataWt = buffer.getArrayOfWritePointers();
-	
-	for (int in = 0; in < numIns; in++) {
-		tempIn[in].copyFrom(0, 0, buffer, in, 0, bufSize);
+	if (1) {
+		const int numIns  = getTotalNumInputChannels();
+		const int bufSize = buffer.getNumSamples();
+		
+		//	float** dataWt = buffer.getArrayOfWritePointers();
+		
+		for (int in = 0; in < numIns; in++) {
+			tempIn[in].copyFrom(0, 0, buffer, in, 0, bufSize);
+		}
+		
+		buffer.clear();
+		
+		for (int in = 0; in < numIns; in++) {
+			speakerSet[in]->compute(tempIn[in], buffer);
+		}
+		buffer.applyGain(mainVolVal);
+	} else {
+		const int numIns = getTotalNumInputChannels();
+		const int numOuts = getTotalNumOutputChannels();
+		const int bufSize = buffer.getNumSamples();
+		const float* dataRd = buffer.getReadPointer(0);
+		const float* dlyRd = dlyBuffer.getReadPointer(0);
+		float* dlyWt = dlyBuffer.getWritePointer(0);
+		
+		const int dlySize = dlyBuffer.getNumSamples();
+		
+		for (int n = 0; n < bufSize; n++) {
+			dlyWt[wtPtr] = dataRd[n];
+			for (int out = 0; out < numOuts; out++) {
+				float* dataWt = buffer.getWritePointer(out);
+				if (out == 0)
+					dataWt[n] = 0;
+				dataWt[n] += speakerGroup[out].tick(rdPtr);
+			}
+			if (++rdPtr == dlySize) rdPtr %= dlySize;
+			if (++wtPtr == dlySize) wtPtr %= dlySize;
+		}
+		
+		buffer.applyGain(mainVolVal);
 	}
-	
-	buffer.clear();
-	
-	for (int in = 0; in < numIns; in++) {
-		speakerSet[in]->compute(tempIn[in], buffer);
-	}
-	
-	buffer.applyGain(mainVolVal);
 }
 
 

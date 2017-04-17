@@ -113,6 +113,13 @@ private:
 	
 	OwnedArray<SpeakerSet> speakerSet;
 	std::vector<AudioSampleBuffer> tempIn;
+	
+	OwnedArray<Spkr> speakerGroup;
+	
+	AudioSampleBuffer dlyBuffer;
+	int rdPtr;
+	int wtPtr;
+	
 		
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UltraPanAudioProcessor)
